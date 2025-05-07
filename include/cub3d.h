@@ -6,7 +6,7 @@
 /*   By: juanherr <juanherr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 12:37:51 by juanherr          #+#    #+#             */
-/*   Updated: 2025/05/07 17:22:49 by juanherr         ###   ########.fr       */
+/*   Updated: 2025/05/07 18:16:57 by juanherr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,8 @@
 
 # define WIN_WIDTH 1280
 # define WIN_HEIGHT 720
+
+# define KEY_ESC 65307
 
 typedef struct s_settings
 {
@@ -53,8 +55,6 @@ int		handle_exit(void *param);
 
 //parse_map.c
 int		check_extension(const char *filename);
-
-# define KEY_ESC 65307
 
 
 #endif
