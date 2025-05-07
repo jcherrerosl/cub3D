@@ -6,7 +6,7 @@
 /*   By: juanherr <juanherr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 12:37:51 by juanherr          #+#    #+#             */
-/*   Updated: 2025/05/07 17:16:49 by juanherr         ###   ########.fr       */
+/*   Updated: 2025/05/07 17:22:49 by juanherr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,14 +53,6 @@ int		handle_exit(void *param);
 
 //parse_map.c
 int		check_extension(const char *filename);
-void	parse_map(int fd, char *first_line, t_settings *s);
-int		map_line_count(int fd);
-
-//parse.c
-void	parse_color(char *line, int *rgb);
-void	parse_line(char *line, t_settings *s);
-void	parse_file(const char *filename, t_settings *s);
-
 
 # define KEY_ESC 65307
 
