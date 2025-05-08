@@ -6,23 +6,24 @@
 /*   By: juanherr <juanherr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 15:30:13 by juanherr          #+#    #+#             */
-/*   Updated: 2025/05/07 15:31:31 by juanherr         ###   ########.fr       */
+/*   Updated: 2025/05/08 14:30:56 by juanherr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
 
-int	handle_key(int keycode, void *param)
+int	key_handler(int key, t_img *img)
 {
-	(void)param;
-	if (keycode == KEY_ESC)
-		exit(0);
+	if (key == KEY_ESC)
+	{
+		close_window(img);
+	}
 	return (0);
 }
 
-int	handle_exit(void *param)
+int	close_window(t_img *img)
 {
-	(void)param;
+	ft_printf("Exiting game\n");
+	mlx_destroy_window(img->mlx, img->win);
 	exit(0);
-	return (0);
 }

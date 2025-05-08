@@ -6,7 +6,7 @@
 /*   By: juanherr <juanherr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 15:34:00 by juanherr          #+#    #+#             */
-/*   Updated: 2025/05/07 15:34:09 by juanherr         ###   ########.fr       */
+/*   Updated: 2025/05/08 14:16:26 by juanherr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,3 +18,4 @@ void	init_settings(t_settings *s)
 	s->floor_rgb[0] = -1;
 	s->ceiling_rgb[0] = -1;
 }
+

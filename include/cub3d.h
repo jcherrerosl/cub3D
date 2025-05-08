@@ -6,7 +6,7 @@
 /*   By: juanherr <juanherr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 12:37:51 by juanherr          #+#    #+#             */
-/*   Updated: 2025/05/07 18:16:57 by juanherr         ###   ########.fr       */
+/*   Updated: 2025/05/08 14:26:31 by juanherr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,8 +50,8 @@ typedef struct s_img
 void	init_settings(t_settings *settings);
 
 //events.c
-int		handle_key(int keycode, void *param);
-int		handle_exit(void *param);
+int	key_handler(int key, t_img *img);
+int	close_window(t_img *img);
 
 //parse_map.c
 int		check_extension(const char *filename);
