@@ -6,7 +6,7 @@
 /*   By: juanherr <juanherr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 15:03:11 by juanherr          #+#    #+#             */
-/*   Updated: 2025/05/09 12:09:31 by juanherr         ###   ########.fr       */
+/*   Updated: 2025/05/09 13:08:41 by juanherr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,10 +24,14 @@ int	check_extension(const char *filename)
 
 int	is_map_line(char *line)
 {
-	while (*line == ' ')
-		line++;
-	return (*line == '1' || *line == '0' || ft_strchr("NSEW", *line));
+	int	i;
+
+	i = 0;
+	while (line[i] == ' ')
+		i++;
+	return (line[i] == '1' || line[i] == '0' || ft_strchr("NSEW", line[i]));
 }
+
 
 void	store_player(t_settings *s, int x, int y, char dir)
 {
@@ -42,10 +46,14 @@ void	parse_file(const char *filename, t_settings *s)
 	int		fd = open(filename, O_RDONLY);
 	char	*line;
 	char	**map = malloc(sizeof(char *) * 128); // ajusta tamaño si hace falta
-	int		map_i = 0;
+	int		map_i;
+	int		x;
+	int		y;
+	char	c;
 
 	if (fd < 0 || !map)
-		exit(1);
+		ft_printerror("Error opening file\n");
+	map_i = 0;
 	while ((line = get_next_line(fd)))
 	{
 		if (ft_strncmp(line, "NO ", 3) == 0)
@@ -56,10 +64,10 @@ void	parse_file(const char *filename, t_settings *s)
 			s->we = ft_strtrim(line + 2, " \n");
 		else if (ft_strncmp(line, "EA ", 3) == 0)
 			s->ea = ft_strtrim(line + 2, " \n");
-		else if (ft_strncmp(line, "F ", 2) == 0)
-			; // parse_floor_color(line + 1); // puedes hacerlo luego
-		else if (ft_strncmp(line, "C ", 2) == 0)
-			; // parse_ceiling_color(line + 1);
+		// else if (ft_strncmp(line, "F ", 2) == 0)
+		// 	; // parse_floor_color(line + 1);
+		// else if (ft_strncmp(line, "C ", 2) == 0)
+		// 	; // parse_ceiling_color(line + 1);
 		else if (is_map_line(line))
 			map[map_i++] = ft_strtrim(line, "\n");
 		free(line);
@@ -67,15 +75,13 @@ void	parse_file(const char *filename, t_settings *s)
 	map[map_i] = NULL;
 	close(fd);
 	s->map = map;
-
-	// detectar jugador
-	int y = 0, x;
+	y = 0;
 	while (s->map[y])
 	{
 		x = 0;
 		while (s->map[y][x])
 		{
-			char c = s->map[y][x];
+			c = s->map[y][x];
 			if (ft_strchr("NSEW", c))
 			{
 				if (c == 'N' && s->map[y][x + 1] == 'O')
