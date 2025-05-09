@@ -6,7 +6,7 @@
 /*   By: juanherr <juanherr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 12:37:51 by juanherr          #+#    #+#             */
-/*   Updated: 2025/05/09 12:13:26 by juanherr         ###   ########.fr       */
+/*   Updated: 2025/05/09 12:50:53 by juanherr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,9 +95,5 @@ void			parse_file(const char *filename, t_settings *s);
 void			draw_pixel(t_img *img, int x, int y, int color);
 void			draw_tile(t_img *img, int x, int y, int color);
 void			draw_map(t_game *game);
-
-//render_utils.c
-int				rgb_to_int(int r, int g, int b);
-void			draw_background(t_game *game);
 
 #endif
