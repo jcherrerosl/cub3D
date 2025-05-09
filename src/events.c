@@ -6,7 +6,7 @@
 /*   By: juanherr <juanherr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/09 12:09:20 by juanherr          #+#    #+#             */
-/*   Updated: 2025/05/09 12:13:00 by juanherr         ###   ########.fr       */
+/*   Updated: 2025/05/09 12:38:37 by juanherr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,15 +33,15 @@ int	key_handler(int keycode, void *param)
 			&& game->settings.map[py - 1][px] != '1')
 			game->settings.player_y--;
 		else if (keycode == KEY_S && game->settings.map[py + 1]
-				&& px < (int)ft_strlen(game->settings.map[py + 1])
-				&& game->settings.map[py + 1][px] != '1')
+			&& px < (int)ft_strlen(game->settings.map[py + 1])
+			&& game->settings.map[py + 1][px] != '1')
 			game->settings.player_y++;
 		else if (keycode == KEY_A && px > 0 && game->settings.map[py][px
-				- 1] != '1')
+			- 1] != '1')
 			game->settings.player_x--;
 		else if (keycode == KEY_D && px
-				+ 1 < (int)ft_strlen(game->settings.map[py])
-				&& game->settings.map[py][px + 1] != '1')
+			+ 1 < (int)ft_strlen(game->settings.map[py])
+			&& game->settings.map[py][px + 1] != '1')
 			game->settings.player_x++;
 		else if (keycode == KEY_ESC)
 			close_window(param);
@@ -68,27 +68,27 @@ int	render_frame(void *param)
 	{
 		mlx_clear_window(game->img.mlx, game->img.win);
 		mlx_put_image_to_window(game->img.mlx, game->img.win, game->intro_img,
-				(WIN_WIDTH - game->intro_w) / 2, (WIN_HEIGHT - game->intro_h)
-				/ 2);
+			(WIN_WIDTH - game->intro_w) / 2, (WIN_HEIGHT - game->intro_h) / 2);
 	}
 	else
 	{
-		// Limpia la imagen, no la ventana
 		ft_memset(game->img.addr, 0, WIN_WIDTH * WIN_HEIGHT * (game->img.bpp
 					/ 8));
 		if (game->start_frame < 120)
 		{
+			mlx_clear_window(game->img.mlx, game->img.win);
 			mlx_string_put(game->img.mlx, game->img.win, 580, 350, 0xAAAAAA,
-					"Game starting...");
+				"Game starting...");
 			game->start_frame++;
 		}
 		else
 		{
-			draw_background(game);
+			ft_memset(game->img.addr, 0, WIN_WIDTH * WIN_HEIGHT
+				* (game->img.bpp / 8));
 			draw_map(game);
+			mlx_put_image_to_window(game->img.mlx, game->img.win,
+				game->img.img, 0, 0);
 		}
-		mlx_put_image_to_window(game->img.mlx, game->img.win, game->img.img, 0,
-				0);
 	}
 	return (0);
 }

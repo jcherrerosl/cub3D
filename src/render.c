@@ -6,7 +6,7 @@
 /*   By: juanherr <juanherr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/09 12:09:34 by juanherr          #+#    #+#             */
-/*   Updated: 2025/05/09 12:09:37 by juanherr         ###   ########.fr       */
+/*   Updated: 2025/05/09 12:23:57 by juanherr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,9 +24,10 @@ void	draw_pixel(t_img *img, int x, int y, int color)
 
 void	draw_tile(t_img *img, int x, int y, int color)
 {
-	int	i = 0;
+	int	i;
 	int	j;
 
+	i = 0;
 	while (i < TILE_SIZE)
 	{
 		j = 0;
