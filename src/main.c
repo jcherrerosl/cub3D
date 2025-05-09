@@ -1,21 +1,8 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: juanherr <juanherr@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/07 12:37:21 by juanherr          #+#    #+#             */
-/*   Updated: 2025/05/08 14:35:15 by juanherr         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "cub3d.h"
 
 int	main(int argc, char **argv)
 {
-	t_settings	s;
-	t_img		img;
+	t_game	game;
 
 	if (argc != 2)
 	{
@@ -27,11 +14,24 @@ int	main(int argc, char **argv)
 		printf("Error: Expected [map_name].cub\n");
 		return (1);
 	}
-	init_settings(&s);
-	img.mlx = mlx_init();
-	img.win = mlx_new_window(img.mlx, WIN_WIDTH, WIN_HEIGHT, "cub3D");
-	mlx_key_hook(img.win, key_handler, &img);
-	mlx_hook(img.win, 17, 0, close_window, &img);
-	mlx_loop(img.mlx);
+
+	init_settings(&game.settings);
+	parse_file(argv[1], &game.settings);
+	init_game(&game); // crea la ventana
+
+	game.started = 0;
+	game.intro_img = mlx_xpm_file_to_image(
+		game.img.mlx, "assets/intro.xpm", &game.intro_w, &game.intro_h);
+	if (!game.intro_img)
+	{
+		printf("Error: no se pudo cargar la imagen intro.xpm\n");
+		return (1);
+	}
+
+	mlx_loop_hook(game.img.mlx, render_frame, &game);
+	mlx_key_hook(game.img.win, key_handler, &game);
+	mlx_hook(game.img.win, 17, 0, close_window, &game);
+
+	mlx_loop(game.img.mlx);
 	return (0);
 }
