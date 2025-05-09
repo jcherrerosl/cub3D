@@ -1,4 +1,26 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   render.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: juanherr <juanherr@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/09 12:09:34 by juanherr          #+#    #+#             */
+/*   Updated: 2025/05/09 12:09:37 by juanherr         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "cub3d.h"
+
+void	draw_pixel(t_img *img, int x, int y, int color)
+{
+	char	*dst;
+
+	if (x < 0 || x >= WIN_WIDTH || y < 0 || y >= WIN_HEIGHT)
+		return ;
+	dst = img->addr + (y * img->line_len + x * (img->bpp / 8));
+	*(unsigned int *)dst = color;
+}
 
 void	draw_tile(t_img *img, int x, int y, int color)
 {
@@ -10,7 +32,7 @@ void	draw_tile(t_img *img, int x, int y, int color)
 		j = 0;
 		while (j < TILE_SIZE)
 		{
-			mlx_pixel_put(img->mlx, img->win, x + j, y + i, color);
+			draw_pixel(img, x + j, y + i, color);
 			j++;
 		}
 		i++;
@@ -39,7 +61,7 @@ void	draw_map(t_game *game)
 		y++;
 	}
 	draw_tile(&game->img,
-		game->settings.player_x * TILE_SIZE + TILE_SIZE / 4,
-		game->settings.player_y * TILE_SIZE + TILE_SIZE / 4,
-		COLOR_PLAYER);
+				game->settings.player_x * TILE_SIZE + TILE_SIZE / 4,
+				game->settings.player_y * TILE_SIZE + TILE_SIZE / 4,
+				COLOR_PLAYER);
 }

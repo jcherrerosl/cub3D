@@ -6,7 +6,7 @@
 /*   By: juanherr <juanherr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 12:37:51 by juanherr          #+#    #+#             */
-/*   Updated: 2025/05/09 03:34:54 by juanherr         ###   ########.fr       */
+/*   Updated: 2025/05/09 12:13:26 by juanherr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,6 @@
 # define COLOR_CEILING 0x222222
 # define COLOR_PLAYER 0xFF0000
 
-
 # define KEY_ESC 65307
 # define KEY_ENTER 65293
 # define KEY_SPACE 32
@@ -37,7 +36,6 @@
 # define KEY_A 97
 # define KEY_S 115
 # define KEY_D 100
-
 
 typedef struct s_settings
 {
@@ -59,6 +57,11 @@ typedef struct s_img
 {
 	void		*mlx;
 	void		*win;
+	void		*img;
+	char		*addr;
+	int			bpp;
+	int			line_len;
+	int			endian;
 }				t_img;
 
 typedef struct s_game
@@ -89,7 +92,12 @@ void			store_player(t_settings *s, int x, int y, char dir);
 void			parse_file(const char *filename, t_settings *s);
 
 //render.c
+void			draw_pixel(t_img *img, int x, int y, int color);
 void			draw_tile(t_img *img, int x, int y, int color);
 void			draw_map(t_game *game);
+
+//render_utils.c
+int				rgb_to_int(int r, int g, int b);
+void			draw_background(t_game *game);
 
 #endif
