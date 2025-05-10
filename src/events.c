@@ -6,7 +6,7 @@
 /*   By: juanherr <juanherr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/09 12:09:20 by juanherr          #+#    #+#             */
-/*   Updated: 2025/05/10 23:37:53 by juanherr         ###   ########.fr       */
+/*   Updated: 2025/05/11 00:08:04 by juanherr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,12 +15,14 @@
 int	key_handler(int keycode, void *param)
 {
 	t_game	*game;
-	int		px;
-	int		py;
+	double	new_x;
+	double	new_y;
+	double	angle;
+	int		map_x;
+	int		map_y;
 
 	game = (t_game *)param;
-	px = game->settings.player_x;
-	py = game->settings.player_y;
+	angle = game->settings.player_angle;
 	if (!game->started && keycode == 32)
 	{
 		game->started = 1;
@@ -28,31 +30,53 @@ int	key_handler(int keycode, void *param)
 	}
 	else if (game->started)
 	{
-		if (keycode == KEY_W && py > 0 && game->settings.map[py - 1]
-			&& px < (int)ft_strlen(game->settings.map[py - 1])
-			&& game->settings.map[py - 1][px] != '1')
-			game->settings.player_y--;
-		else if (keycode == KEY_S && game->settings.map[py + 1]
-				&& px < (int)ft_strlen(game->settings.map[py + 1])
-				&& game->settings.map[py + 1][px] != '1')
-			game->settings.player_y++;
-		else if (keycode == KEY_A && px > 0 && game->settings.map[py][px
-				- 1] != '1')
-			game->settings.player_x--;
-		else if (keycode == KEY_D && px
-				+ 1 < (int)ft_strlen(game->settings.map[py])
-				&& game->settings.map[py][px + 1] != '1')
-			game->settings.player_x++;
+		if (keycode == KEY_W)
+		{
+			new_x = game->settings.player_x + cos(angle) * MOVE_SPEED;
+			new_y = game->settings.player_y + sin(angle) * MOVE_SPEED;
+		}
+		else if (keycode == KEY_S)
+		{
+			new_x = game->settings.player_x - cos(angle) * MOVE_SPEED;
+			new_y = game->settings.player_y - sin(angle) * MOVE_SPEED;
+		}
+		else if (keycode == KEY_A) // opcional: puedes eliminar esto luego
+		{
+			new_x = game->settings.player_x - sin(angle) * MOVE_SPEED;
+			new_y = game->settings.player_y + cos(angle) * MOVE_SPEED;
+		}
+		else if (keycode == KEY_D) // opcional: puedes eliminar esto luego
+		{
+			new_x = game->settings.player_x + sin(angle) * MOVE_SPEED;
+			new_y = game->settings.player_y - cos(angle) * MOVE_SPEED;
+		}
 		else if (keycode == KEY_LEFT)
 			game->settings.player_angle -= 0.05;
 		else if (keycode == KEY_RIGHT)
 			game->settings.player_angle += 0.05;
+		else if (keycode == KEY_ESC)
+			close_window(param);
+		else
+			return (0);
+		// normalizar ángulo
 		if (game->settings.player_angle < 0)
 			game->settings.player_angle += 2 * M_PI;
 		if (game->settings.player_angle >= 2 * M_PI)
 			game->settings.player_angle -= 2 * M_PI;
-		else if (keycode == KEY_ESC)
-			close_window(param);
+		// si el movimiento fue de tipo WASD, comprobar colisión
+		if (keycode == KEY_W || keycode == KEY_S || keycode == KEY_A
+			|| keycode == KEY_D)
+		{
+			map_x = (int)new_x;
+			map_y = (int)new_y;
+			if (game->settings.map[map_y] &&
+				map_x < (int)ft_strlen(game->settings.map[map_y]) &&
+				game->settings.map[map_y][map_x] != '1')
+			{
+				game->settings.player_x = new_x;
+				game->settings.player_y = new_y;
+			}
+		}
 	}
 	return (0);
 }
