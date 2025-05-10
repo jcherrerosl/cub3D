@@ -6,7 +6,7 @@
 /*   By: juanherr <juanherr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 12:37:51 by juanherr          #+#    #+#             */
-/*   Updated: 2025/05/09 12:54:37 by juanherr         ###   ########.fr       */
+/*   Updated: 2025/05/10 23:27:40 by juanherr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,15 @@
 
 # define WIN_WIDTH 1280
 # define WIN_HEIGHT 720
+
+# ifndef M_PI
+#  define M_PI 3.14159265358979323846
+# endif
+
+# define STEP 0.01
+
+#define FOV (M_PI / 3)
+#define NUM_RAYS WIN_WIDTH
 
 # define TILE_SIZE 20
 # define COLOR_WALL 0xAAAAAA
@@ -95,5 +104,10 @@ void			parse_file(const char *filename, t_settings *s);
 void			draw_pixel(t_img *img, int x, int y, int color);
 void			draw_tile(t_img *img, int x, int y, int color);
 void			draw_map(t_game *game);
+
+// raycasting.c
+void			draw_column(t_game *game, int x, int wall_height, int color);
+void			cast_rays(t_game *game);
+double			cast_single_ray(t_game *game, double ray_angle);
 
 #endif

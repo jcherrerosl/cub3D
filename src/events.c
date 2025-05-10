@@ -6,7 +6,7 @@
 /*   By: juanherr <juanherr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/09 12:09:20 by juanherr          #+#    #+#             */
-/*   Updated: 2025/05/09 12:38:37 by juanherr         ###   ########.fr       */
+/*   Updated: 2025/05/10 23:23:54 by juanherr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,6 +86,7 @@ int	render_frame(void *param)
 			ft_memset(game->img.addr, 0, WIN_WIDTH * WIN_HEIGHT
 				* (game->img.bpp / 8));
 			draw_map(game);
+			cast_rays(game);
 			mlx_put_image_to_window(game->img.mlx, game->img.win,
 				game->img.img, 0, 0);
 		}
