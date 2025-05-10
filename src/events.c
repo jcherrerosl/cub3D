@@ -6,7 +6,7 @@
 /*   By: juanherr <juanherr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/09 12:09:20 by juanherr          #+#    #+#             */
-/*   Updated: 2025/05/10 23:23:54 by juanherr         ###   ########.fr       */
+/*   Updated: 2025/05/10 23:37:53 by juanherr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,16 +33,24 @@ int	key_handler(int keycode, void *param)
 			&& game->settings.map[py - 1][px] != '1')
 			game->settings.player_y--;
 		else if (keycode == KEY_S && game->settings.map[py + 1]
-			&& px < (int)ft_strlen(game->settings.map[py + 1])
-			&& game->settings.map[py + 1][px] != '1')
+				&& px < (int)ft_strlen(game->settings.map[py + 1])
+				&& game->settings.map[py + 1][px] != '1')
 			game->settings.player_y++;
 		else if (keycode == KEY_A && px > 0 && game->settings.map[py][px
-			- 1] != '1')
+				- 1] != '1')
 			game->settings.player_x--;
 		else if (keycode == KEY_D && px
-			+ 1 < (int)ft_strlen(game->settings.map[py])
-			&& game->settings.map[py][px + 1] != '1')
+				+ 1 < (int)ft_strlen(game->settings.map[py])
+				&& game->settings.map[py][px + 1] != '1')
 			game->settings.player_x++;
+		else if (keycode == KEY_LEFT)
+			game->settings.player_angle -= 0.05;
+		else if (keycode == KEY_RIGHT)
+			game->settings.player_angle += 0.05;
+		if (game->settings.player_angle < 0)
+			game->settings.player_angle += 2 * M_PI;
+		if (game->settings.player_angle >= 2 * M_PI)
+			game->settings.player_angle -= 2 * M_PI;
 		else if (keycode == KEY_ESC)
 			close_window(param);
 	}
@@ -68,7 +76,8 @@ int	render_frame(void *param)
 	{
 		mlx_clear_window(game->img.mlx, game->img.win);
 		mlx_put_image_to_window(game->img.mlx, game->img.win, game->intro_img,
-			(WIN_WIDTH - game->intro_w) / 2, (WIN_HEIGHT - game->intro_h) / 2);
+				(WIN_WIDTH - game->intro_w) / 2, (WIN_HEIGHT - game->intro_h)
+				/ 2);
 	}
 	else
 	{
@@ -78,17 +87,17 @@ int	render_frame(void *param)
 		{
 			mlx_clear_window(game->img.mlx, game->img.win);
 			mlx_string_put(game->img.mlx, game->img.win, 580, 350, 0xAAAAAA,
-				"Game starting...");
+					"Game starting...");
 			game->start_frame++;
 		}
 		else
 		{
-			ft_memset(game->img.addr, 0, WIN_WIDTH * WIN_HEIGHT
-				* (game->img.bpp / 8));
+			ft_memset(game->img.addr, 0, WIN_WIDTH * WIN_HEIGHT * (game->img.bpp
+						/ 8));
 			draw_map(game);
 			cast_rays(game);
-			mlx_put_image_to_window(game->img.mlx, game->img.win,
-				game->img.img, 0, 0);
+			mlx_put_image_to_window(game->img.mlx, game->img.win, game->img.img,
+					0, 0);
 		}
 	}
 	return (0);

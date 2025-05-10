@@ -6,7 +6,7 @@
 /*   By: juanherr <juanherr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/10 23:22:51 by juanherr          #+#    #+#             */
-/*   Updated: 2025/05/10 23:30:07 by juanherr         ###   ########.fr       */
+/*   Updated: 2025/05/10 23:35:28 by juanherr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,14 +67,7 @@ void	cast_rays(t_game *game)
 	double	distance;
 	int		wall_height;
 
-	if (game->settings.player_dir == 'N')
-		player_angle = 3 * M_PI / 2;
-	else if (game->settings.player_dir == 'S')
-		player_angle = M_PI / 2;
-	else if (game->settings.player_dir == 'E')
-		player_angle = 0;
-	else
-		player_angle = M_PI;
+	player_angle = game->settings.player_angle;
 	ray_step = (FOV) / WIN_WIDTH;
 	ray_angle = player_angle - (FOV / 2);
 	x = 0;

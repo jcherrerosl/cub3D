@@ -6,7 +6,7 @@
 /*   By: juanherr <juanherr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 15:03:11 by juanherr          #+#    #+#             */
-/*   Updated: 2025/05/10 23:30:19 by juanherr         ###   ########.fr       */
+/*   Updated: 2025/05/10 23:33:05 by juanherr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,14 @@ void	store_player(t_settings *s, int x, int y, char dir)
 {
 	s->player_x = x;
 	s->player_y = y;
-	s->player_dir = dir;
+	if (dir == 'N')
+		s->player_angle = 3 * M_PI / 2;
+	else if (dir == 'S')
+		s->player_angle = M_PI / 2;
+	else if (dir == 'E')
+		s->player_angle = 0;
+	else if (dir == 'W')
+		s->player_angle = M_PI;
 	s->map[y][x] = '0';
 }
 

@@ -6,7 +6,7 @@
 /*   By: juanherr <juanherr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 12:37:51 by juanherr          #+#    #+#             */
-/*   Updated: 2025/05/10 23:27:40 by juanherr         ###   ########.fr       */
+/*   Updated: 2025/05/10 23:33:36 by juanherr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,9 @@
 # define KEY_S 115
 # define KEY_D 100
 
+# define KEY_LEFT 65361
+# define KEY_RIGHT 65363
+
 typedef struct s_settings
 {
 	char		*no;
@@ -60,6 +63,7 @@ typedef struct s_settings
 	int			player_x;
 	int			player_y;
 	char		player_dir;
+	double		player_angle;
 }				t_settings;
 
 typedef struct s_img
