@@ -6,7 +6,7 @@
 /*   By: juanherr <juanherr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/09 12:09:20 by juanherr          #+#    #+#             */
-/*   Updated: 2025/05/11 00:08:04 by juanherr         ###   ########.fr       */
+/*   Updated: 2025/05/11 18:39:33 by juanherr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int	key_handler(int keycode, void *param)
 
 	game = (t_game *)param;
 	angle = game->settings.player_angle;
-	if (!game->started && keycode == 32)
+	if (!game->started && keycode == KEY_SPACE)
 	{
 		game->started = 1;
 		game->start_frame = 0;
@@ -40,12 +40,12 @@ int	key_handler(int keycode, void *param)
 			new_x = game->settings.player_x - cos(angle) * MOVE_SPEED;
 			new_y = game->settings.player_y - sin(angle) * MOVE_SPEED;
 		}
-		else if (keycode == KEY_A) // opcional: puedes eliminar esto luego
+		else if (keycode == KEY_A)
 		{
 			new_x = game->settings.player_x - sin(angle) * MOVE_SPEED;
 			new_y = game->settings.player_y + cos(angle) * MOVE_SPEED;
 		}
-		else if (keycode == KEY_D) // opcional: puedes eliminar esto luego
+		else if (keycode == KEY_D)
 		{
 			new_x = game->settings.player_x + sin(angle) * MOVE_SPEED;
 			new_y = game->settings.player_y - cos(angle) * MOVE_SPEED;
@@ -58,24 +58,25 @@ int	key_handler(int keycode, void *param)
 			close_window(param);
 		else
 			return (0);
-		// normalizar ángulo
 		if (game->settings.player_angle < 0)
 			game->settings.player_angle += 2 * M_PI;
 		if (game->settings.player_angle >= 2 * M_PI)
 			game->settings.player_angle -= 2 * M_PI;
-		// si el movimiento fue de tipo WASD, comprobar colisión
 		if (keycode == KEY_W || keycode == KEY_S || keycode == KEY_A
 			|| keycode == KEY_D)
 		{
 			map_x = (int)new_x;
+			map_y = (int)game->settings.player_y;
+			if (game->settings.map[map_y] &&
+				map_x < (int)ft_strlen(game->settings.map[map_y]) &&
+				game->settings.map[map_y][map_x] != '1')
+				game->settings.player_x = new_x;
+			map_x = (int)game->settings.player_x;
 			map_y = (int)new_y;
 			if (game->settings.map[map_y] &&
 				map_x < (int)ft_strlen(game->settings.map[map_y]) &&
 				game->settings.map[map_y][map_x] != '1')
-			{
-				game->settings.player_x = new_x;
 				game->settings.player_y = new_y;
-			}
 		}
 	}
 	return (0);
