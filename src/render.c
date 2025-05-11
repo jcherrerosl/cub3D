@@ -6,7 +6,7 @@
 /*   By: juanherr <juanherr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/09 12:09:34 by juanherr          #+#    #+#             */
-/*   Updated: 2025/05/09 12:23:57 by juanherr         ###   ########.fr       */
+/*   Updated: 2025/05/11 19:06:00 by juanherr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,10 +28,10 @@ void	draw_tile(t_img *img, int x, int y, int color)
 	int	j;
 
 	i = 0;
-	while (i < TILE_SIZE)
+	while (i < MINIMAP_TILE)
 	{
 		j = 0;
-		while (j < TILE_SIZE)
+		while (j < MINIMAP_TILE)
 		{
 			draw_pixel(img, x + j, y + i, color);
 			j++;
@@ -64,5 +64,32 @@ void	draw_map(t_game *game)
 	draw_tile(&game->img,
 				game->settings.player_x * TILE_SIZE + TILE_SIZE / 4,
 				game->settings.player_y * TILE_SIZE + TILE_SIZE / 4,
+				COLOR_PLAYER);
+}
+
+void	draw_minimap(t_game *game)
+{
+	int	x;
+	int	y;
+	int	color;
+
+	y = 0;
+	while (game->settings.map && game->settings.map[y])
+	{
+		x = 0;
+		while (game->settings.map[y][x])
+		{
+			if (game->settings.map[y][x] == '1')
+				color = COLOR_WALL;
+			else
+				color = COLOR_FLOOR;
+			draw_tile(&game->img, x * MINIMAP_TILE, y * MINIMAP_TILE, color);
+			x++;
+		}
+		y++;
+	}
+	draw_tile(&game->img,
+				game->settings.player_x * MINIMAP_TILE + MINIMAP_TILE / 4,
+				game->settings.player_y * MINIMAP_TILE + MINIMAP_TILE / 4,
 				COLOR_PLAYER);
 }

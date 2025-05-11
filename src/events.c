@@ -6,7 +6,7 @@
 /*   By: juanherr <juanherr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/09 12:09:20 by juanherr          #+#    #+#             */
-/*   Updated: 2025/05/11 18:39:33 by juanherr         ###   ########.fr       */
+/*   Updated: 2025/05/11 19:19:52 by juanherr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,25 +30,27 @@ int	key_handler(int keycode, void *param)
 	}
 	else if (game->started)
 	{
-		if (keycode == KEY_W)
+		new_x = game->settings.player_x;
+		new_y = game->settings.player_y;
+		if (keycode == KEY_W)  
 		{
-			new_x = game->settings.player_x + cos(angle) * MOVE_SPEED;
-			new_y = game->settings.player_y + sin(angle) * MOVE_SPEED;
+			new_x += cos(angle) * MOVE_SPEED;
+			new_y += sin(angle) * MOVE_SPEED;
 		}
-		else if (keycode == KEY_S)
+		else if (keycode == KEY_S) //chequear bien ???? no estoy seguro 
 		{
-			new_x = game->settings.player_x - cos(angle) * MOVE_SPEED;
-			new_y = game->settings.player_y - sin(angle) * MOVE_SPEED;
-		}
-		else if (keycode == KEY_A)
-		{
-			new_x = game->settings.player_x - sin(angle) * MOVE_SPEED;
-			new_y = game->settings.player_y + cos(angle) * MOVE_SPEED;
+			new_x -= cos(angle) * MOVE_SPEED;
+			new_y -= sin(angle) * MOVE_SPEED;
 		}
 		else if (keycode == KEY_D)
 		{
-			new_x = game->settings.player_x + sin(angle) * MOVE_SPEED;
-			new_y = game->settings.player_y - cos(angle) * MOVE_SPEED;
+			new_x += cos(angle + M_PI / 2) * MOVE_SPEED;
+			new_y += sin(angle + M_PI / 2) * MOVE_SPEED;
+		}
+		else if (keycode == KEY_A)
+		{
+			new_x += cos(angle - M_PI / 2) * MOVE_SPEED;
+			new_y += sin(angle - M_PI / 2) * MOVE_SPEED;
 		}
 		else if (keycode == KEY_LEFT)
 			game->settings.player_angle -= 0.05;
@@ -119,8 +121,9 @@ int	render_frame(void *param)
 		{
 			ft_memset(game->img.addr, 0, WIN_WIDTH * WIN_HEIGHT * (game->img.bpp
 						/ 8));
-			draw_map(game);
+			// draw_map(game);
 			cast_rays(game);
+			draw_minimap(game);
 			mlx_put_image_to_window(game->img.mlx, game->img.win, game->img.img,
 					0, 0);
 		}
