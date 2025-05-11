@@ -6,7 +6,7 @@
 /*   By: juanherr <juanherr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 12:37:51 by juanherr          #+#    #+#             */
-/*   Updated: 2025/05/11 18:58:25 by juanherr         ###   ########.fr       */
+/*   Updated: 2025/05/11 21:57:32 by juanherr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,8 @@
 #  define M_PI 3.14159265358979323846
 # endif
 
-# define STEP 0.01
-# define MOVE_SPEED 0.1
+# define STEP 0.005
+# define MOVE_SPEED 0.01
 
 # define FOV (M_PI / 3)
 # define NUM_RAYS WIN_WIDTH
@@ -91,7 +91,6 @@ typedef struct s_game
 	int			intro_h;
 	int			started;
 	int			start_frame;
-
 }				t_game;
 
 //init.c
