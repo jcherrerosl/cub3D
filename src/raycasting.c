@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   raycasting.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: juanherr <juanherr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aloiki <aloiki@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/10 23:22:51 by juanherr          #+#    #+#             */
-/*   Updated: 2025/05/11 21:59:50 by juanherr         ###   ########.fr       */
+/*   Updated: 2025/05/14 01:11:24 by aloiki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ void	draw_column(t_game *game, int x, int wall_height, int color)
 	int	y;
 	int	end;
 
-	y = (WIN_HEIGHT / 2) - (wall_height / 2);
+	y = (WIN_HEIGHT / 2) - (wall_height / 2) + game->camera->vert_offset;
 	end = y + wall_height;
 	if (y < 0)
 		y = 0;

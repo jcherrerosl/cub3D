@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: juanherr <juanherr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aloiki <aloiki@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 12:37:51 by juanherr          #+#    #+#             */
-/*   Updated: 2025/05/11 21:57:32 by juanherr         ###   ########.fr       */
+/*   Updated: 2025/05/14 01:13:19 by aloiki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@
 # define MINIMAP_RATIO 0.2
 # define MINIMAP_TILE TILE_SIZE * MINIMAP_RATIO
 
+# define MAX_VERTICAL_OFFSET 200
 
 # ifndef M_PI
 #  define M_PI 3.14159265358979323846
@@ -82,10 +83,19 @@ typedef struct s_img
 	int			endian;
 }				t_img;
 
+typedef struct s_camera
+{
+	int			prev_x;
+	int			prev_y;
+	double		sensitivity;
+	double		vert_offset;
+}			t_camera;
+
 typedef struct s_game
 {
 	t_settings	settings;
 	t_img		img;
+	t_camera	*camera;
 	void		*intro_img;
 	int			intro_w;
 	int			intro_h;
@@ -118,5 +128,9 @@ void			draw_minimap(t_game *game);
 void			draw_column(t_game *game, int x, int wall_height, int color);
 void			cast_rays(t_game *game);
 double			cast_single_ray(t_game *game, double ray_angle);
+
+// mouse_input.c
+int				mouse_handler(int x, int y, t_game *game);
+void			rotate_left_right(t_game *game, int pos_x);
 
 #endif

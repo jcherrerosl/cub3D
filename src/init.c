@@ -3,14 +3,22 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: juanherr <juanherr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aloiki <aloiki@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 15:34:00 by juanherr          #+#    #+#             */
-/*   Updated: 2025/05/11 22:08:04 by juanherr         ###   ########.fr       */
+/*   Updated: 2025/05/14 00:33:01 by aloiki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
+
+static void	init_camera(t_camera *camera)
+{
+	camera->prev_x = 0;
+	camera->prev_y = 0;
+	camera->sensitivity = 0.0005;
+	camera->vert_offset = 0.0;
+}
 
 void	init_settings(t_settings *s)
 {
@@ -40,4 +48,8 @@ void	init_game(t_game *game)
 
 	game->started = 0;
 	game->start_frame = 0;
+	game->camera = malloc(sizeof(t_camera));
+	if (!game->camera)
+		ft_printerror("Could not allocate memory for camera");
+	init_camera(game->camera);
 }
