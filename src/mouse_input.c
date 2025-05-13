@@ -6,7 +6,7 @@
 /*   By: aloiki <aloiki@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 23:34:44 by aloiki            #+#    #+#             */
-/*   Updated: 2025/05/14 01:14:31 by aloiki           ###   ########.fr       */
+/*   Updated: 2025/05/14 01:16:55 by aloiki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ void	rotate_left_right(t_game *game, int pos_x)
 {
 	double	angle;
 
-	angle = pos_x * game->camera->sensitivity;
+	angle = pos_x * game->camera->sensitivity * 5;
 	game->settings.player_angle += angle;
 	if (game->settings.player_angle < 0)
        		game->settings.player_angle += 2 * M_PI;
