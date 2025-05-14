@@ -6,7 +6,7 @@
 /*   By: aloiki <aloiki@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 12:37:51 by juanherr          #+#    #+#             */
-/*   Updated: 2025/05/14 16:32:53 by aloiki           ###   ########.fr       */
+/*   Updated: 2025/05/14 17:36:30 by aloiki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,12 +101,24 @@ typedef struct s_key_state
 	int			right;
 }				t_key_state;
 
+typedef struct s_textures
+{
+	void		*no;
+	void		*so;
+	void		*we;
+	void		*ea;
+	int			width;
+	int			height;
+}				t_textures;
+
+
 typedef struct s_game
 {
 	t_settings	settings;
 	t_img		img;
 	t_camera	*camera;
 	t_key_state	*key_state;
+	t_textures	*textures;
 	void		*intro_img;
 	int			intro_w;
 	int			intro_h;

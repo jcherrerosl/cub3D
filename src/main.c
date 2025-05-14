@@ -6,7 +6,7 @@
 /*   By: aloiki <aloiki@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/09 12:09:28 by juanherr          #+#    #+#             */
-/*   Updated: 2025/05/14 16:26:23 by aloiki           ###   ########.fr       */
+/*   Updated: 2025/05/14 17:12:24 by aloiki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,6 @@ int	main(int argc, char **argv)
 	if (!game.intro_img)
 		ft_printerror("Could not load intro image\n");
 	mlx_loop_hook(game.img.mlx, render_frame, &game);
-	//mlx_key_hook(game.img.win, key_handler, &game);
 	mlx_hook(game.img.win, 6, (1L << 6), mouse_handler, &game);
 	mlx_hook(game.img.win, 2, (1L << 0), key_press, &game);
 	mlx_hook(game.img.win, 3, (1L << 1), key_release, &game);
