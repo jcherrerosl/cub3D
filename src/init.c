@@ -6,11 +6,28 @@
 /*   By: aloiki <aloiki@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 15:34:00 by juanherr          #+#    #+#             */
-/*   Updated: 2025/05/14 00:33:01 by aloiki           ###   ########.fr       */
+/*   Updated: 2025/05/14 16:11:55 by aloiki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
+
+static t_key_state	*init_key_state(t_game *game)
+{
+	t_key_state	*key_state;
+
+	(void)game;
+	key_state = malloc(sizeof(t_key_state));
+	if (!key_state)
+		ft_printerror("Could not allocate memory for key state");
+	key_state->w = 0;
+	key_state->a = 0;
+	key_state->s = 0;
+	key_state->d = 0;
+	key_state->left = 0;
+	key_state->right = 0;
+	return (key_state);
+}
 
 static void	init_camera(t_camera *camera)
 {
@@ -52,4 +69,5 @@ void	init_game(t_game *game)
 	if (!game->camera)
 		ft_printerror("Could not allocate memory for camera");
 	init_camera(game->camera);
+	game->key_state = init_key_state(game);
 }

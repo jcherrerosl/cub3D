@@ -6,7 +6,7 @@
 /*   By: aloiki <aloiki@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 12:37:51 by juanherr          #+#    #+#             */
-/*   Updated: 2025/05/14 01:13:19 by aloiki           ###   ########.fr       */
+/*   Updated: 2025/05/14 16:32:53 by aloiki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@
 # endif
 
 # define STEP 0.005
-# define MOVE_SPEED 0.01
+# define MOVE_SPEED 0.05
 
 # define FOV (M_PI / 3)
 # define NUM_RAYS WIN_WIDTH
@@ -66,8 +66,8 @@ typedef struct s_settings
 	char		**map;
 	int			map_width;
 	int			map_height;
-	int			player_x;
-	int			player_y;
+	double			player_x;
+	double			player_y;
 	char		player_dir;
 	double		player_angle;
 }				t_settings;
@@ -91,11 +91,22 @@ typedef struct s_camera
 	double		vert_offset;
 }			t_camera;
 
+typedef struct s_key_state
+{
+	int			w;
+	int			a;
+	int			s;
+	int			d;
+	int			left;
+	int			right;
+}				t_key_state;
+
 typedef struct s_game
 {
 	t_settings	settings;
 	t_img		img;
 	t_camera	*camera;
+	t_key_state	*key_state;
 	void		*intro_img;
 	int			intro_w;
 	int			intro_h;
@@ -111,6 +122,8 @@ void			init_game(t_game *game);
 int				key_handler(int key, void *param);
 int				close_window(void *param);
 int				render_frame(void *param);
+int				key_press(int keycode, t_game *game);
+int				key_release(int keycode, t_game *game);
 
 //parse_map.c
 int				check_extension(const char *filename);
@@ -133,4 +146,6 @@ double			cast_single_ray(t_game *game, double ray_angle);
 int				mouse_handler(int x, int y, t_game *game);
 void			rotate_left_right(t_game *game, int pos_x);
 
+// movement.c
+void			handle_movement(t_game *game);
 #endif
