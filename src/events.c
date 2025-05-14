@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   events.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aloiki <aloiki@student.42.fr>              +#+  +:+       +#+        */
+/*   By: juanherr <juanherr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/09 12:09:20 by juanherr          #+#    #+#             */
-/*   Updated: 2025/05/14 17:12:14 by aloiki           ###   ########.fr       */
+/*   Updated: 2025/05/14 18:39:41 by juanherr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,6 +94,7 @@ int	render_frame(void *param)
 		//	draw_map(game);								//orden por capas inverso (al final)
 			cast_rays(game);														//medio
 			draw_minimap(game);														//encima
+			// draw weapon y objetivo
 			mlx_put_image_to_window(game->img.mlx, game->img.win, game->img.img, 0, 0);
 		}
 	}
