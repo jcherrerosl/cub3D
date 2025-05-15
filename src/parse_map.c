@@ -6,7 +6,7 @@
 /*   By: juanherr <juanherr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 15:03:11 by juanherr          #+#    #+#             */
-/*   Updated: 2025/05/11 21:53:34 by juanherr         ###   ########.fr       */
+/*   Updated: 2025/05/15 10:35:41 by juanherr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,6 @@ int	is_map_line(char *line)
 	return (line[i] == '1' || line[i] == '0' || ft_strchr("NSEW", line[i]));
 }
 
-
 void	store_player(t_settings *s, int x, int y, char dir)
 {
 	s->player_x = x;
@@ -52,8 +51,9 @@ static int	count_map_lines(const char *filename)
 {
 	int		fd;
 	char	*line;
-	int		count = 0;
+	int		count;
 
+	count = 0;
 	fd = open(filename, O_RDONLY);
 	if (fd < 0)
 		return (-1);
@@ -68,7 +68,6 @@ static int	count_map_lines(const char *filename)
 	close(fd);
 	return (count);
 }
-
 
 void	parse_file(const char *filename, t_settings *s)
 {
@@ -96,10 +95,10 @@ void	parse_file(const char *filename, t_settings *s)
 			s->we = ft_strtrim(line + 2, " \n");
 		else if (ft_strncmp(line, "EA ", 3) == 0)
 			s->ea = ft_strtrim(line + 2, " \n");
-		// else if (ft_strncmp(line, "F ", 2) == 0)
-		// 	parse_floor_color(line + 1);
-		// else if (ft_strncmp(line, "C ", 2) == 0)
-		// 	parse_ceiling_color(line + 1);
+		else if (ft_strncmp(line, "F ", 2) == 0)
+			parse_color(line + 2, s->floor_rgb);
+		else if (ft_strncmp(line, "C ", 2) == 0)
+			parse_color(line + 2, s->ceiling_rgb);
 		else if (is_map_line(line))
 			map[map_i++] = ft_strtrim(line, "\n");
 		free(line);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   raycasting.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aloiki <aloiki@student.42.fr>              +#+  +:+       +#+        */
+/*   By: juanherr <juanherr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/10 23:22:51 by juanherr          #+#    #+#             */
-/*   Updated: 2025/05/14 01:11:24 by aloiki           ###   ########.fr       */
+/*   Updated: 2025/05/15 12:12:19 by juanherr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,10 +30,9 @@ void	draw_column(t_game *game, int x, int wall_height, int color)
 	}
 }
 
-double	cast_single_ray(t_game *game, double ray_angle)
+double	cast_single_ray(t_game *game, double ray_angle, double *ray_x,
+		double *ray_y, int *side)
 {
-	double	ray_x;
-	double	ray_y;
 	double	distance;
 	double	px;
 	double	py;
@@ -45,14 +44,20 @@ double	cast_single_ray(t_game *game, double ray_angle)
 	py = game->settings.player_y + 0.5;
 	while (1)
 	{
-		ray_x = px + cos(ray_angle) * distance;
-		ray_y = py + sin(ray_angle) * distance;
-		map_x = (int)ray_x;
-		map_y = (int)ray_y;
+		*ray_x = px + cos(ray_angle) * distance;
+		*ray_y = py + sin(ray_angle) * distance;
+		map_x = (int)(*ray_x);
+		map_y = (int)(*ray_y);
 		if (map_y < 0 || map_x < 0 || !game->settings.map[map_y]
 			|| map_x >= (int)ft_strlen(game->settings.map[map_y])
 			|| game->settings.map[map_y][map_x] == '1')
+		{
+			if (fabs((*ray_x - px)) > fabs((*ray_y - py)))
+				*side = 0; // impacto vertical (este/oeste)
+			else
+				*side = 1; // impacto horizontal (norte/sur)
 			break ;
+		}
 		distance += STEP;
 	}
 	return (distance);
@@ -60,25 +65,57 @@ double	cast_single_ray(t_game *game, double ray_angle)
 
 void	cast_rays(t_game *game)
 {
-	int		x;
-	double	ray_angle;
-	double	player_angle;
-	double	ray_step;
-	double	distance;
-	int		wall_height;
+	int				x;
+	double			ray_angle;
+	double			player_angle;
+	double			ray_step;
+	double			distance;
+	int				wall_height;
+	double			ray_x;
+	double			ray_y;
+	double			wall_hit;
+	int				tex_x;
+	int				side;
+	t_render_info	r;
 
 	player_angle = game->settings.player_angle;
-	ray_step = (FOV) / WIN_WIDTH;
+	ray_step = FOV / WIN_WIDTH;
 	ray_angle = player_angle - (FOV / 2);
 	x = 0;
 	while (x < WIN_WIDTH)
 	{
-		distance = cast_single_ray(game, ray_angle);
-		distance *= cos(ray_angle - player_angle); // Corrección de "fish-eye"
+		distance = cast_single_ray(game, ray_angle, &ray_x, &ray_y, &side);
+		distance *= cos(ray_angle - player_angle); // Fisheye correction
 		wall_height = (int)(WIN_HEIGHT / distance);
 		if (wall_height > WIN_HEIGHT)
 			wall_height = WIN_HEIGHT;
-		draw_column(game, x, wall_height, 0xAAAAAA);
+		if (side == 0)
+			wall_hit = ray_y - floor(ray_y); // vertical: usamos Y
+		else
+			wall_hit = ray_x - floor(ray_x); // horizontal: usamos X
+		tex_x = (int)(wall_hit * game->textures->width);
+		if (tex_x < 0)
+			tex_x = 0;
+		if (tex_x >= game->textures->width)
+			tex_x = game->textures->width - 1;
+		if (side == 0)
+		{
+			if (cos(ray_angle) > 0)
+				r.texture_data = game->textures->we_data;
+			else
+				r.texture_data = game->textures->ea_data;
+		}
+		else
+		{
+			if (sin(ray_angle) > 0)
+				r.texture_data = game->textures->no_data;
+			else
+				r.texture_data = game->textures->so_data;
+		}
+		r.x = x;
+		r.tex_x = tex_x;
+		r.wall_height = wall_height;
+		draw_textured_column(game, r);
 		ray_angle += ray_step;
 		x++;
 	}

@@ -6,7 +6,7 @@
 /*   By: juanherr <juanherr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/09 12:09:20 by juanherr          #+#    #+#             */
-/*   Updated: 2025/05/14 18:39:41 by juanherr         ###   ########.fr       */
+/*   Updated: 2025/05/15 11:46:56 by juanherr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,6 +92,7 @@ int	render_frame(void *param)
 			handle_movement(game);
 			ft_memset(game->img.addr, 0, WIN_WIDTH * WIN_HEIGHT * (game->img.bpp / 8));
 		//	draw_map(game);								//orden por capas inverso (al final)
+			draw_floor_and_ceiling(game);						//fondo	
 			cast_rays(game);														//medio
 			draw_minimap(game);														//encima
 			// draw weapon y objetivo
