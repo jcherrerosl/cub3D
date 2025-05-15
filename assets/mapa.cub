@@ -1,10 +1,10 @@
 NO assets/textures/leaking_wall.xpm
-SO assets/textures/leaking_wall.xpm
-WE assets/textures/leaking_wall.xpm
-EA assets/textures/leaking_wall.xpm
+SO assets/textures/leaking_wall2.xpm
+WE assets/textures/leaking_wall3.xpm
+EA assets/textures/leaking_wall4.xpm
 
-F 220,100,0
-C 225,30,0
+F 40, 40, 40
+C 200, 190, 150
 
         1111111111111111111111111
         1000000000110000000000001
