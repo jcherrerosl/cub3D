@@ -6,7 +6,7 @@
 /*   By: juanherr <juanherr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/10 23:22:51 by juanherr          #+#    #+#             */
-/*   Updated: 2025/05/15 12:12:19 by juanherr         ###   ########.fr       */
+/*   Updated: 2025/05/15 12:35:03 by juanherr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ double	cast_single_ray(t_game *game, double ray_angle, double *ray_x,
 			|| map_x >= (int)ft_strlen(game->settings.map[map_y])
 			|| game->settings.map[map_y][map_x] == '1')
 		{
-			if (fabs((*ray_x - px)) > fabs((*ray_y - py)))
+			if (fabs((*ray_x - px)) > fabs((*ray_y - py))) //valor absoluto
 				*side = 0; // impacto vertical (este/oeste)
 			else
 				*side = 1; // impacto horizontal (norte/sur)
@@ -90,22 +90,22 @@ void	cast_rays(t_game *game)
 		if (wall_height > WIN_HEIGHT)
 			wall_height = WIN_HEIGHT;
 		if (side == 0)
-			wall_hit = ray_y - floor(ray_y); // vertical: usamos Y
+			wall_hit = ray_y - floor(ray_y); // vertical
 		else
-			wall_hit = ray_x - floor(ray_x); // horizontal: usamos X
+			wall_hit = ray_x - floor(ray_x); // horizontal
 		tex_x = (int)(wall_hit * game->textures->width);
 		if (tex_x < 0)
 			tex_x = 0;
 		if (tex_x >= game->textures->width)
 			tex_x = game->textures->width - 1;
-		if (side == 0)
+		if (side == 0) //vertical
 		{
 			if (cos(ray_angle) > 0)
 				r.texture_data = game->textures->we_data;
 			else
 				r.texture_data = game->textures->ea_data;
 		}
-		else
+		else //horizontal
 		{
 			if (sin(ray_angle) > 0)
 				r.texture_data = game->textures->no_data;
