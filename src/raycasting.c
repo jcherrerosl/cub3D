@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   raycasting.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: juanherr <juanherr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aloiki <aloiki@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/10 23:22:51 by juanherr          #+#    #+#             */
-/*   Updated: 2025/05/15 12:35:03 by juanherr         ###   ########.fr       */
+/*   Updated: 2025/05/17 17:12:22 by aloiki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,9 +53,25 @@ double	cast_single_ray(t_game *game, double ray_angle, double *ray_x,
 			|| game->settings.map[map_y][map_x] == '1')
 		{
 			if (fabs((*ray_x - px)) > fabs((*ray_y - py))) //valor absoluto
+			{
 				*side = 0; // impacto vertical (este/oeste)
+				if (cos(ray_angle) > 0)
+					map_x = (int)(*ray_x);
+				else
+					map_x = (int)(*ray_x) + 1;
+				*ray_x = map_x;
+				*ray_y = py + (map_x - px) * tan(ray_angle);
+			}
 			else
+			{
 				*side = 1; // impacto horizontal (norte/sur)
+				if (sin(ray_angle) > 0)
+					map_y = (int)(*ray_y);
+				else
+					map_y = (int)(*ray_y) + 1;
+				*ray_y = map_y;
+				*ray_x = px + (map_y - py) / tan(ray_angle);
+			}
 			break ;
 		}
 		distance += STEP;
@@ -94,6 +110,10 @@ void	cast_rays(t_game *game)
 		else
 			wall_hit = ray_x - floor(ray_x); // horizontal
 		tex_x = (int)(wall_hit * game->textures->width);
+		if (side == 0 && cos(ray_angle) < 0)
+			tex_x = game->textures->width - tex_x - 1;
+		if (side == 1 && sin(ray_angle) > 0)
+			tex_x = game->textures->width - tex_x - 1;
 		if (tex_x < 0)
 			tex_x = 0;
 		if (tex_x >= game->textures->width)
