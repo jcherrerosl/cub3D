@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aloiki <aloiki@student.42.fr>              +#+  +:+       +#+        */
+/*   By: juanherr <juanherr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 12:37:51 by juanherr          #+#    #+#             */
-/*   Updated: 2025/05/17 15:46:52 by aloiki           ###   ########.fr       */
+/*   Updated: 2025/05/21 00:16:32 by juanherr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,6 +138,9 @@ typedef struct s_game
 	void			*intro_img;
 	int				intro_w;
 	int				intro_h;
+	void			*gun;
+	int				gun_w;
+	int				gun_h;
 	int				started;
 	int				start_frame;
 }					t_game;

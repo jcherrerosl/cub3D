@@ -6,7 +6,7 @@
 /*   By: juanherr <juanherr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/09 12:09:20 by juanherr          #+#    #+#             */
-/*   Updated: 2025/05/15 12:30:30 by juanherr         ###   ########.fr       */
+/*   Updated: 2025/05/21 00:26:53 by juanherr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,6 +99,10 @@ int	render_frame(void *param)
 			// draw weapon y objetivo
 			mlx_put_image_to_window(game->img.mlx, game->img.win, game->img.img,
 					0, 0);
+			mlx_put_image_to_window(game->img.mlx, game->img.win, game->img.img,
+					0, 0);
+			mlx_put_image_to_window(game->img.mlx, game->img.win, game->gun,
+					(WIN_WIDTH - game->gun_w) / 2, (WIN_HEIGHT - game->gun_h));
 		}
 	}
 	return (0);
