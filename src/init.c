@@ -6,7 +6,7 @@
 /*   By: juanherr <juanherr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 15:34:00 by juanherr          #+#    #+#             */
-/*   Updated: 2025/05/21 12:12:58 by juanherr         ###   ########.fr       */
+/*   Updated: 2025/05/21 20:31:31 by juanherr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,4 +111,16 @@ void	init_game(t_game *game)
 	init_camera(game->camera);
 	game->key_state = init_key_state(game);
 	game->textures = init_textures(game);
+	init_gun_sprite(game);
+}
+
+void	init_gun_sprite(t_game *game)
+{
+	game->gun_img = mlx_xpm_file_to_image(
+		game->img.mlx,
+		"./assets/gun.xpm",
+		&game->gun_width,
+		&game->gun_height);
+	if (!game->gun_img)
+		ft_printerror("Could not load gun.xpm");
 }

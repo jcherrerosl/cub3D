@@ -6,7 +6,7 @@
 /*   By: juanherr <juanherr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/09 12:09:34 by juanherr          #+#    #+#             */
-/*   Updated: 2025/05/11 19:06:00 by juanherr         ###   ########.fr       */
+/*   Updated: 2025/05/21 20:34:40 by juanherr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,4 +92,43 @@ void	draw_minimap(t_game *game)
 				game->settings.player_x * MINIMAP_TILE + MINIMAP_TILE / 4,
 				game->settings.player_y * MINIMAP_TILE + MINIMAP_TILE / 4,
 				COLOR_PLAYER);
+}
+
+void	draw_gun(t_game *game, void *frame_img)
+{
+	int	color;
+	int	*gun_pixels;
+	int	*frame_buffer;
+	int	x_offset;
+	int	y_offset;
+
+	int x, y;
+	int bpp, line_len, endian;
+	int bpp2, line_len2, endian2;
+	int screen_x, screen_y;
+	gun_pixels = (int *)mlx_get_data_addr(game->gun_img, &bpp, &line_len,
+			&endian);
+	frame_buffer = (int *)mlx_get_data_addr(frame_img, &bpp2, &line_len2,
+			&endian2);
+	x_offset = (WIN_WIDTH - game->gun_width) / 2;
+	y_offset = WIN_HEIGHT - game->gun_height;
+	y = 0;
+	while (y < game->gun_height)
+	{
+		x = 0;
+		while (x < game->gun_width)
+		{
+			color = gun_pixels[y * (line_len / 4) + x];
+			if (color != 0xFF00FF)
+			{
+				screen_x = x + x_offset;
+				screen_y = y + y_offset;
+				if (screen_x >= 0 && screen_x < WIN_WIDTH && screen_y >= 0
+					&& screen_y < WIN_HEIGHT)
+					frame_buffer[screen_y * (line_len2 / 4) + screen_x] = color;
+			}
+			x++;
+		}
+		y++;
+	}
 }

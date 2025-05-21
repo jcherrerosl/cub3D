@@ -6,7 +6,7 @@
 /*   By: juanherr <juanherr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 12:37:51 by juanherr          #+#    #+#             */
-/*   Updated: 2025/05/21 12:13:13 by juanherr         ###   ########.fr       */
+/*   Updated: 2025/05/21 20:28:23 by juanherr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -138,9 +138,9 @@ typedef struct s_game
 	void			*intro_img;
 	int				intro_w;
 	int				intro_h;
-	void			*gun;
-	int				gun_w;
-	int				gun_h;
+	void			*gun_img;
+	int				gun_width;
+	int				gun_height;
 	int				started;
 	int				start_frame;
 }					t_game;
@@ -148,6 +148,8 @@ typedef struct s_game
 //init.c
 void				init_settings(t_settings *settings);
 void				init_game(t_game *game);
+void				init_gun_sprite(t_game *game);
+
 
 //events.c
 int					key_handler(int key, void *param);
@@ -167,6 +169,7 @@ void				draw_pixel(t_img *img, int x, int y, int color);
 void				draw_tile(t_img *img, int x, int y, int color);
 void				draw_map(t_game *game);
 void				draw_minimap(t_game *game);
+void				draw_gun(t_game *game, void *frame_img);
 
 // raycasting.c
 void				draw_column(t_game *game, int x, int wall_height,
@@ -174,7 +177,8 @@ void				draw_column(t_game *game, int x, int wall_height,
 void				cast_rays(t_game *game);
 double				cast_single_ray(t_game *game, double ray_angle,
 						double *ray_x, double *ray_y, int *side);
-void				draw_textured_column(t_game *game, t_render_info r);;
+void				draw_textured_column(t_game *game, t_render_info r);
+;
 
 // mouse_input.c
 int					mouse_handler(int x, int y, t_game *game);

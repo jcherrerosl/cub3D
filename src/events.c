@@ -6,7 +6,7 @@
 /*   By: juanherr <juanherr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/09 12:09:20 by juanherr          #+#    #+#             */
-/*   Updated: 2025/05/21 12:10:18 by juanherr         ###   ########.fr       */
+/*   Updated: 2025/05/21 20:28:56 by juanherr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,8 +101,9 @@ int	render_frame(void *param)
 					0, 0);
 			mlx_put_image_to_window(game->img.mlx, game->img.win, game->img.img,
 					0, 0);
-			// mlx_put_image_to_window(game->img.mlx, game->img.win, game->gun,
-			// 		(WIN_WIDTH - game->gun_w) / 2, (WIN_HEIGHT - game->gun_h));
+			draw_gun(game, game->img.img);
+			mlx_put_image_to_window(game->img.mlx, game->img.win, game->img.img,
+					0, 0);
 		}
 	}
 	return (0);
