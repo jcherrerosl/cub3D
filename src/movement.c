@@ -6,7 +6,7 @@
 /*   By: aloiki <aloiki@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/14 15:57:25 by aloiki            #+#    #+#             */
-/*   Updated: 2025/05/21 21:22:40 by aloiki           ###   ########.fr       */
+/*   Updated: 2025/05/21 21:32:47 by aloiki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,19 +24,19 @@ static void	collision_check(t_game *game, double new_x, double new_y)
 	else
 		buffer_x = -COLLISION_BUFFER;
 	map_x = (int)floor(new_x + buffer_x + 0.5);
-	map_y = (int)floor(game->settings.player_y);
+	map_y = (int)floor(game->settings.player_y + 0.5);
 	if (game->settings.map[map_y] &&
-		map_x < (int)ft_strlen(game->settings.map[map_y]) &&
+		map_x < (int)floor(ft_strlen(game->settings.map[map_y])) &&
 		game->settings.map[map_y][map_x] != '1')
 		game->settings.player_x = new_x;
 	if (new_y > game->settings.player_y)
 		buffer_y = COLLISION_BUFFER;
 	else
 		buffer_y = -COLLISION_BUFFER;
-	map_x = (int)floor(game->settings.player_x);
+	map_x = (int)floor(game->settings.player_x + 0.5);
 	map_y = (int)floor(new_y + buffer_y + 0.5);
 	if (game->settings.map[map_y] &&
-		map_x < (int)ft_strlen(game->settings.map[map_y]) &&
+		map_x < (int)floor(ft_strlen(game->settings.map[map_y])) &&
 		game->settings.map[map_y][map_x] != '1')
 		game->settings.player_y = new_y;
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: juanherr <juanherr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aloiki <aloiki@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 12:37:51 by juanherr          #+#    #+#             */
-/*   Updated: 2025/05/21 20:28:23 by juanherr         ###   ########.fr       */
+/*   Updated: 2025/05/21 21:26:47 by aloiki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@
 # define MINIMAP_TILE TILE_SIZE *MINIMAP_RATIO
 
 # define MAX_VERTICAL_OFFSET 200
-# define COLLISION_BUFFER 0.35
+# define COLLISION_BUFFER 0.1
 
 # ifndef M_PI
 #  define M_PI 3.14159265358979323846
