@@ -6,7 +6,7 @@
 /*   By: juanherr <juanherr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 15:34:00 by juanherr          #+#    #+#             */
-/*   Updated: 2025/05/15 12:31:31 by juanherr         ###   ########.fr       */
+/*   Updated: 2025/05/21 12:12:58 by juanherr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,8 @@ static t_textures	*init_textures(t_game *game)
 	textures = malloc(sizeof(t_textures));
 	if (!textures)
 		ft_printerror("Could not allocate memory for textures");
-	textures->width = 128;
-	textures->height = 128;
+	textures->width = 256;
+	textures->height = 256;
 	textures->no = mlx_xpm_file_to_image(game->img.mlx,
 											game->settings.no,
 											&textures->width,

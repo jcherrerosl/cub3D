@@ -6,7 +6,7 @@
 /*   By: juanherr <juanherr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 12:37:51 by juanherr          #+#    #+#             */
-/*   Updated: 2025/05/21 00:16:32 by juanherr         ###   ########.fr       */
+/*   Updated: 2025/05/21 12:13:13 by juanherr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@
 # define MINIMAP_TILE TILE_SIZE *MINIMAP_RATIO
 
 # define MAX_VERTICAL_OFFSET 200
-# define COLLISION_BUFFER 0.3
+# define COLLISION_BUFFER 0.35
 
 # ifndef M_PI
 #  define M_PI 3.14159265358979323846
