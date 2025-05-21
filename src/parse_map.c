@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_map.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: juanherr <juanherr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aloiki <aloiki@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 15:03:11 by juanherr          #+#    #+#             */
-/*   Updated: 2025/05/15 12:32:21 by juanherr         ###   ########.fr       */
+/*   Updated: 2025/05/21 21:21:32 by aloiki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,8 @@ int	is_map_line(char *line)
 
 void	store_player(t_settings *s, int x, int y, char dir)
 {
-	s->player_x = x;
-	s->player_y = y;
+	s->player_x = x + 0.5;
+	s->player_y = y + 0.5;
 	if (dir == 'N')
 		s->player_angle = 3 * M_PI / 2;
 	else if (dir == 'S')
