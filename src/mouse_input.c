@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mouse_input.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: juanherr <juanherr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aloiki <aloiki@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 23:34:44 by aloiki            #+#    #+#             */
-/*   Updated: 2025/05/15 12:31:52 by juanherr         ###   ########.fr       */
+/*   Updated: 2025/05/24 16:24:00 by aloiki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,12 +43,20 @@ int	mouse_handler(int x, int y, t_game *game)
 	static int	prev_y = WIN_HEIGHT / 2;
 	int		pos_x = WIN_WIDTH / 2;
 	int		pos_y = WIN_HEIGHT / 2;
-	int		center_x = WIN_WIDTH / 2;
+	// int		center_x = WIN_WIDTH / 2;
+	static int	ignore = 0;
 
 	if (!game->started)
 		return (0);
-	if (x == center_x && y == WIN_HEIGHT / 2)
+	if (x == WIN_WIDTH / 2 && y == WIN_HEIGHT / 2)
 		return (0);
+	if (ignore == 1)
+	{
+		ignore = 0;
+		prev_x = x;
+		prev_y = y;
+		return (0);
+	}
 	pos_x = x - prev_x;
 	pos_y = y - prev_y;
 	if (pos_x != 0)
@@ -57,7 +65,12 @@ int	mouse_handler(int x, int y, t_game *game)
 		rotate_up_down(game, pos_y);
 	prev_x = x;
 	prev_y = y;
-	// mlx_mouse_move(game->img.mlx, game->img.win, 
-	// 	center_x, WIN_HEIGHT / 2);
+	if (x <= 10 || x >= WIN_WIDTH - 10 || y <= 10 || y >= WIN_HEIGHT - 10)
+	{
+		printf("Recentering mouse to %d, %d\n", WIN_WIDTH / 2, WIN_HEIGHT / 2);
+
+		mlx_mouse_move(game->img.mlx, game->img.win, WIN_WIDTH / 2, WIN_HEIGHT / 2);
+		ignore = 1;
+	}
 	return (0);
 }
