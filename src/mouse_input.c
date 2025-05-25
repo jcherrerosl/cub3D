@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mouse_input.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aloiki <aloiki@student.42.fr>              +#+  +:+       +#+        */
+/*   By: juanherr <juanherr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 23:34:44 by aloiki            #+#    #+#             */
-/*   Updated: 2025/05/24 16:24:00 by aloiki           ###   ########.fr       */
+/*   Updated: 2025/05/25 21:39:29 by juanherr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,9 +65,9 @@ int	mouse_handler(int x, int y, t_game *game)
 		rotate_up_down(game, pos_y);
 	prev_x = x;
 	prev_y = y;
-	if (x <= 10 || x >= WIN_WIDTH - 10 || y <= 10 || y >= WIN_HEIGHT - 10)
+	if (x <= 10 || x >= WIN_WIDTH - 10)
 	{
-		printf("Recentering mouse to %d, %d\n", WIN_WIDTH / 2, WIN_HEIGHT / 2);
+		//printf("Recentering mouse to %d, %d\n", WIN_WIDTH / 2, WIN_HEIGHT / 2);
 
 		mlx_mouse_move(game->img.mlx, game->img.win, WIN_WIDTH / 2, WIN_HEIGHT / 2);
 		ignore = 1;

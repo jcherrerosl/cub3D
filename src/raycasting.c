@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   raycasting.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aloiki <aloiki@student.42.fr>              +#+  +:+       +#+        */
+/*   By: juanherr <juanherr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/10 23:22:51 by juanherr          #+#    #+#             */
-/*   Updated: 2025/05/17 17:12:22 by aloiki           ###   ########.fr       */
+/*   Updated: 2025/05/25 21:38:01 by juanherr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,55 +30,108 @@ void	draw_column(t_game *game, int x, int wall_height, int color)
 	}
 }
 
+static inline int	is_vertical_hit(double x)
+{
+	return (fabs(x - floor(x + EPS)) < EPS);
+}
+
+/* -----------------------------------------------------------
+ *  Devuelve:
+ *      - distancia perpendicular hasta la pared
+ *      - coordenada exacta del impacto  →  *ray_x / *ray_y
+ *      - 0 si chocamos contra una línea vertical  (cara E/W)
+ *      - 1 si chocamos contra una línea horizontal (cara N/S)
+ * ----------------------------------------------------------- */
 double	cast_single_ray(t_game *game, double ray_angle, double *ray_x,
 		double *ray_y, int *side)
 {
-	double	distance;
-	double	px;
-	double	py;
+	double	dir_x;
+	double	dir_y;
+	double	pos_x;
+	double	pos_y;
 	int		map_x;
 	int		map_y;
+	double	delta_x;
+	double	delta_y;
+	double	side_dist_x;
+	double	side_dist_y;
+	int		step_x;
+	int		step_y;
+	int		hit;
+	double	perp_dist;
 
-	distance = 0;
-	px = game->settings.player_x + 0.5;
-	py = game->settings.player_y + 0.5;
-	while (1)
+	/* 1. Dirección del rayo  */
+	dir_x = cos(ray_angle);
+	dir_y = sin(ray_angle);
+	/* 2. Posición del jugador (centro del tile) */
+	pos_x = game->settings.player_x + 0.5;
+	pos_y = game->settings.player_y + 0.5;
+	/* 3. Casilla actual */
+	map_x = (int)pos_x;
+	map_y = (int)pos_y;
+	/* 4. Distancias entre grid-lines */
+	delta_x = (dir_x == 0) ? 1e30 : fabs(1.0 / dir_x);
+	delta_y = (dir_y == 0) ? 1e30 : fabs(1.0 / dir_y);
+	/* 5. Distancia hasta **la PRÓXIMA** grid-line en cada eje */
+	if (dir_x < 0)
 	{
-		*ray_x = px + cos(ray_angle) * distance;
-		*ray_y = py + sin(ray_angle) * distance;
-		map_x = (int)(*ray_x);
-		map_y = (int)(*ray_y);
-		if (map_y < 0 || map_x < 0 || !game->settings.map[map_y]
-			|| map_x >= (int)ft_strlen(game->settings.map[map_y])
-			|| game->settings.map[map_y][map_x] == '1')
-		{
-			if (fabs((*ray_x - px)) > fabs((*ray_y - py))) //valor absoluto
-			{
-				*side = 0; // impacto vertical (este/oeste)
-				if (cos(ray_angle) > 0)
-					map_x = (int)(*ray_x);
-				else
-					map_x = (int)(*ray_x) + 1;
-				*ray_x = map_x;
-				*ray_y = py + (map_x - px) * tan(ray_angle);
-			}
-			else
-			{
-				*side = 1; // impacto horizontal (norte/sur)
-				if (sin(ray_angle) > 0)
-					map_y = (int)(*ray_y);
-				else
-					map_y = (int)(*ray_y) + 1;
-				*ray_y = map_y;
-				*ray_x = px + (map_y - py) / tan(ray_angle);
-			}
-			break ;
-		}
-		distance += STEP;
+		step_x = -1;
+		side_dist_x = (pos_x - map_x) * delta_x;
 	}
-	return (distance);
+	else
+	{
+		step_x = 1;
+		side_dist_x = (map_x + 1.0 - pos_x) * delta_x;
+	}
+	if (dir_y < 0)
+	{
+		step_y = -1;
+		side_dist_y = (pos_y - map_y) * delta_y;
+	}
+	else
+	{
+		step_y = 1;
+		side_dist_y = (map_y + 1.0 - pos_y) * delta_y;
+	}
+	/* 6. DDA: avanzamos hasta entrar en un muro (‘1’) */
+	hit = 0;
+	while (!hit)
+	{
+		if (side_dist_x < side_dist_y)
+		{
+			side_dist_x += delta_x;
+			map_x += step_x;
+			*side = 0; /* impacto vertical */
+		}
+		else
+		{
+			side_dist_y += delta_y;
+			map_y += step_y;
+			*side = 1; /* impacto horizontal */
+		}
+		if (map_y < 0 || map_x < 0 ||
+			!game->settings.map[map_y] ||
+			map_x >= (int)ft_strlen(game->settings.map[map_y]) ||
+			game->settings.map[map_y][map_x] == '1')
+			hit = 1;
+	}
+	/* 7. Distancia perpendicular y coordenada de impacto */
+	if (*side == 0) /* vertical */
+	{
+		perp_dist = (map_x - pos_x + (1 - step_x) / 2.0) / dir_x;
+	}
+	else /* horizontal */
+	{
+		perp_dist = (map_y - pos_y + (1 - step_y) / 2.0) / dir_y;
+	}
+	*ray_x = pos_x + perp_dist * dir_x;
+	*ray_y = pos_y + perp_dist * dir_y;
+	return (fabs(perp_dist));
 }
 
+/* ------------------------------------------------------------------------- */
+/*  l   Ray–casting principal: lanza WIN_WIDTH rayos e imprime cada columna  */
+/* ------------------------------------------------------------------------- */
 void	cast_rays(t_game *game)
 {
 	int				x;
@@ -89,54 +142,44 @@ void	cast_rays(t_game *game)
 	int				wall_height;
 	double			ray_x;
 	double			ray_y;
-	double			wall_hit;
-	int				tex_x;
 	int				side;
+//	double			wall_x;
+	int				tex_x;
 	t_render_info	r;
 
+//	const int tex_w = game->textures->width; /* ← ancho de TODAS las texturas */
 	player_angle = game->settings.player_angle;
 	ray_step = FOV / WIN_WIDTH;
-	ray_angle = player_angle - (FOV / 2);
+	ray_angle = player_angle - (FOV / 2.0);
 	x = 0;
 	while (x < WIN_WIDTH)
 	{
+		/* ------------- DDA: lanzamos UN rayo ------------- */
 		distance = cast_single_ray(game, ray_angle, &ray_x, &ray_y, &side);
-		distance *= cos(ray_angle - player_angle); // Fisheye correction
+		distance = cast_single_ray(game, ray_angle, &ray_x, &ray_y, &side);
+		/* Altura en pantalla de la pared encontrada */
 		wall_height = (int)(WIN_HEIGHT / distance);
 		if (wall_height > WIN_HEIGHT)
 			wall_height = WIN_HEIGHT;
-		if (side == 0)
-			wall_hit = ray_y - floor(ray_y); // vertical
-		else
-			wall_hit = ray_x - floor(ray_x); // horizontal
-		tex_x = (int)(wall_hit * game->textures->width);
-		if (side == 0 && cos(ray_angle) < 0)
+		/* fracción de pared recorrida */
+		double wall_x = (side == 0) ? (ray_y - floor(ray_y))
+									: (ray_x - floor(ray_x));
+		tex_x = (int)(wall_x * game->textures->width);
+		/* invertir la franja si miramos “desde detrás” */
+		if ((side == 0 && cos(ray_angle) < 0) ||
+			(side == 1 && sin(ray_angle) > 0))
 			tex_x = game->textures->width - tex_x - 1;
-		if (side == 1 && sin(ray_angle) > 0)
-			tex_x = game->textures->width - tex_x - 1;
-		if (tex_x < 0)
-			tex_x = 0;
-		if (tex_x >= game->textures->width)
-			tex_x = game->textures->width - 1;
-		if (side == 0) //vertical
-		{
-			if (cos(ray_angle) > 0)
-				r.texture_data = game->textures->we_data;
-			else
-				r.texture_data = game->textures->ea_data;
-		}
-		else //horizontal
-		{
-			if (sin(ray_angle) > 0)
-				r.texture_data = game->textures->no_data;
-			else
-				r.texture_data = game->textures->so_data;
-		}
+		/* elegir textura coherente (ver tabla anterior) */
+		if (side == 0) /* vertical */
+			r.texture_data = (cos(ray_angle) > 0) ? game->textures->we_data : game->textures->ea_data;
+		else /* horizontal */
+			r.texture_data = (sin(ray_angle) > 0) ? game->textures->no_data : game->textures->so_data;
+		/* ------------- Lanzamos la columna a la rutina de pintado ------------- */
 		r.x = x;
 		r.tex_x = tex_x;
 		r.wall_height = wall_height;
 		draw_textured_column(game, r);
 		ray_angle += ray_step;
-		x++;
+		++x;
 	}
 }

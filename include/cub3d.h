@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aloiki <aloiki@student.42.fr>              +#+  +:+       +#+        */
+/*   By: juanherr <juanherr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 12:37:51 by juanherr          #+#    #+#             */
-/*   Updated: 2025/05/21 21:26:47 by aloiki           ###   ########.fr       */
+/*   Updated: 2025/05/25 21:33:34 by juanherr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@
 # define MAX_VERTICAL_OFFSET 200
 # define COLLISION_BUFFER 0.1
 
-# ifndef M_PI
+# ifndef M_PI 
 #  define M_PI 3.14159265358979323846
 # endif
 
@@ -36,7 +36,8 @@
 # define MOVE_SPEED 0.1
 
 # define FOV (M_PI / 3)
-# define NUM_RAYS WIN_WIDTH
+# define NUM_RAYS WIN_WIDTH * 2 
+# define EPS 1e-6
 
 # define TILE_SIZE 20
 # define COLOR_WALL 0xAAAAAA
@@ -175,8 +176,8 @@ void				draw_gun(t_game *game, void *frame_img);
 void				draw_column(t_game *game, int x, int wall_height,
 						int color);
 void				cast_rays(t_game *game);
-double				cast_single_ray(t_game *game, double ray_angle,
-						double *ray_x, double *ray_y, int *side);
+double  cast_single_ray(t_game *game, double ray_angle,
+	double *ray_x, double *ray_y, int *side);
 void				draw_textured_column(t_game *game, t_render_info r);
 ;
 
