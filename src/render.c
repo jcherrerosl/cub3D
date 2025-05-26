@@ -6,7 +6,7 @@
 /*   By: juanherr <juanherr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/09 12:09:34 by juanherr          #+#    #+#             */
-/*   Updated: 2025/05/21 20:34:40 by juanherr         ###   ########.fr       */
+/*   Updated: 2025/05/26 15:14:05 by juanherr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,53 @@ void	draw_map(t_game *game)
 				COLOR_PLAYER);
 }
 
+void	draw_player_circle(t_game *game, int center_x, int center_y, int radius, int color)
+{
+	int	dx;
+	int	dy;
+
+	dy = -radius;
+	while (dy <= radius)
+	{
+		dx = -radius;
+		while (dx <= radius)
+		{
+			if (dx * dx + dy * dy <= radius * radius)
+				draw_pixel(&game->img, center_x + dx, center_y + dy, color);
+			dx++;
+		}
+		dy++;
+	}
+}
+
+void	draw_fov_cone(t_game *game, int px, int py, double angle, double fov, int length, int color)
+{
+	int		i;
+	double	start_angle;
+	double	ray_angle;
+	int		steps;
+	int		x;
+	int		y;
+
+	start_angle = angle - (fov / 2.0);
+	steps = 50; // Número de pasos para el cono de visión
+	i = 0;
+	while (i < steps)
+	{
+		ray_angle = start_angle + (fov * i / steps);
+		int j = 0;
+		while (j < length)
+		{
+			x = px + cos(ray_angle) * j;
+			y = py + sin(ray_angle) * j;
+			draw_pixel(&game->img, x, y, color);
+			j++;
+		}
+		i++;
+	}
+}
+
+
 void	draw_minimap(t_game *game)
 {
 	int	x;
@@ -88,11 +135,18 @@ void	draw_minimap(t_game *game)
 		}
 		y++;
 	}
-	draw_tile(&game->img,
-				game->settings.player_x * MINIMAP_TILE + MINIMAP_TILE / 4,
-				game->settings.player_y * MINIMAP_TILE + MINIMAP_TILE / 4,
-				COLOR_PLAYER);
+
+	// Coordenadas del jugador en el minimapa
+	int px = game->settings.player_x * MINIMAP_TILE;
+	int py = game->settings.player_y * MINIMAP_TILE;
+
+	// Círculo rojo
+	draw_player_circle(game, px, py, 3, 0xFF0000);
+
+	// Cono azul de visión (sustituye la rayita amarilla)
+	draw_fov_cone(game, px, py, game->settings.player_angle, FOV, 15, 0x00FFFF);
 }
+
 
 void	draw_gun(t_game *game, void *frame_img)
 {

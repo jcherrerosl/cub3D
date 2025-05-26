@@ -6,7 +6,7 @@
 /*   By: juanherr <juanherr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 12:37:51 by juanherr          #+#    #+#             */
-/*   Updated: 2025/05/26 11:57:28 by juanherr         ###   ########.fr       */
+/*   Updated: 2025/05/26 15:09:58 by juanherr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,13 +22,13 @@
 # define WIN_WIDTH 1280
 # define WIN_HEIGHT 720
 
-# define MINIMAP_RATIO 0.2
+# define MINIMAP_RATIO 0.5
 # define MINIMAP_TILE TILE_SIZE *MINIMAP_RATIO
 
 # define MAX_VERTICAL_OFFSET 200
 # define COLLISION_BUFFER 0.1
 
-# ifndef M_PI 
+# ifndef M_PI
 #  define M_PI 3.14159265358979323846
 # endif
 
@@ -36,7 +36,7 @@
 # define MOVE_SPEED 0.1
 
 # define FOV (M_PI / 3)
-# define NUM_RAYS WIN_WIDTH * 2 
+# define NUM_RAYS WIN_WIDTH * 2
 # define EPS 1e-6
 
 # define TILE_SIZE 20
@@ -151,7 +151,6 @@ void				init_settings(t_settings *settings);
 void				init_game(t_game *game);
 void				init_gun_sprite(t_game *game);
 
-
 //events.c
 int					key_handler(int key, void *param);
 int					close_window(void *param);
@@ -177,10 +176,9 @@ void				draw_gun(t_game *game, void *frame_img);
 void				draw_column(t_game *game, int x, int wall_height,
 						int color);
 void				cast_rays(t_game *game);
-double  cast_single_ray(t_game *game, double ray_angle,
-	double *ray_x, double *ray_y, int *side);
+double				cast_single_ray(t_game *game, double ray_angle,
+						double *ray_x, double *ray_y, int *side);
 void				draw_textured_column(t_game *game, t_render_info r);
-;
 
 // mouse_input.c
 int					mouse_handler(int x, int y, t_game *game);
