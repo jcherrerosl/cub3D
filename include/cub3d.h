@@ -6,7 +6,7 @@
 /*   By: juanherr <juanherr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 12:37:51 by juanherr          #+#    #+#             */
-/*   Updated: 2025/05/26 15:57:27 by juanherr         ###   ########.fr       */
+/*   Updated: 2025/05/26 16:54:45 by juanherr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,6 @@
 
 # define FOV (M_PI / 3)
 # define NUM_RAYS WIN_WIDTH * 2
-# define EPS 1e-6
 
 # define TILE_SIZE 20
 # define COLOR_WALL 0xAAAAAA
@@ -130,20 +129,20 @@ typedef struct s_render_info
 
 typedef struct s_gun
 {
-	int		*gun_pixels;
-	int		*frame_buffer;
-	int		x_offset;
-	int		y_offset;
-	int		bpp1;
-	int		line_len1;
-	int		endian1;
-	int		bpp2;
-	int		line_len2;
-	int		endian2;
-	int		color;
-	int		x;
-	int		y;
-}	t_gun;
+	int				*gun_pixels;
+	int				*frame_buffer;
+	int				x_offset;
+	int				y_offset;
+	int				bpp1;
+	int				line_len1;
+	int				endian1;
+	int				bpp2;
+	int				line_len2;
+	int				endian2;
+	int				color;
+	int				x;
+	int				y;
+}					t_gun;
 
 typedef struct s_game
 {

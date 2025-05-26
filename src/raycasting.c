@@ -6,7 +6,7 @@
 /*   By: juanherr <juanherr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/10 23:22:51 by juanherr          #+#    #+#             */
-/*   Updated: 2025/05/26 16:36:33 by juanherr         ###   ########.fr       */
+/*   Updated: 2025/05/26 16:54:19 by juanherr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,11 +29,6 @@ void	draw_column(t_game *game, int x, int wall_height, int color)
 		y++;
 	}
 }
-
-// static inline int	is_vertical_hit(double x)
-// {
-// 	return (fabs(x - floor(x + EPS)) < EPS);
-// }
 
 /* -----------------------------------------------------------
  *  Devuelve:

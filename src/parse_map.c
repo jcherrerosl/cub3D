@@ -6,7 +6,7 @@
 /*   By: juanherr <juanherr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 15:03:11 by juanherr          #+#    #+#             */
-/*   Updated: 2025/05/26 16:46:10 by juanherr         ###   ########.fr       */
+/*   Updated: 2025/05/26 16:52:56 by juanherr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,7 +112,6 @@ void	check_map_enclosed(t_settings *s)
 		{
 			if (c == '0' || ft_strchr("NSEW", c))
 			{
-				// vecinos
 				if (!s->map[y + 1] || !s->map[y - 1] ||
 					x >= (int)ft_strlen(s->map[y + 1]) ||
 					x >= (int)ft_strlen(s->map[y - 1]) ||
@@ -121,7 +120,6 @@ void	check_map_enclosed(t_settings *s)
 					x == 0 || s->map[y][x - 1] == ' ' ||
 					s->map[y][x + 1] == ' ' || s->map[y][x + 1] == '\0')
 				{
-					printf("Open map at (%d, %d)\n", x, y);
 					ft_printerror("Map is not properly enclosed\n");
 				}
 			}
@@ -130,8 +128,6 @@ void	check_map_enclosed(t_settings *s)
 		y++;
 	}
 }
-
-
 
 void	parse_file(const char *filename, t_settings *s)
 {
