@@ -6,7 +6,7 @@
 /*   By: juanherr <juanherr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/10 23:22:51 by juanherr          #+#    #+#             */
-/*   Updated: 2025/05/26 15:18:31 by juanherr         ###   ########.fr       */
+/*   Updated: 2025/05/26 16:36:33 by juanherr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,10 +30,10 @@ void	draw_column(t_game *game, int x, int wall_height, int color)
 	}
 }
 
-static inline int	is_vertical_hit(double x)
-{
-	return (fabs(x - floor(x + EPS)) < EPS);
-}
+// static inline int	is_vertical_hit(double x)
+// {
+// 	return (fabs(x - floor(x + EPS)) < EPS);
+// }
 
 /* -----------------------------------------------------------
  *  Devuelve:
@@ -74,7 +74,6 @@ double	cast_single_ray(t_game *game, double ray_angle, double *ray_x,
 		delta_x = 1e30;
 	else
 		delta_x = fabs(1.0 / dir_x);
-
 	if (dir_y == 0)
 		delta_y = 1e30;
 	else
@@ -150,11 +149,10 @@ void	cast_rays(t_game *game)
 	double			ray_x;
 	double			ray_y;
 	int				side;
-//	double			wall_x;
 	int				tex_x;
 	t_render_info	r;
+	double			wall_x;
 
-//	const int tex_w = game->textures->width; /* ← ancho de TODAS las texturas */
 	player_angle = game->settings.player_angle;
 	ray_step = FOV / WIN_WIDTH;
 	ray_angle = player_angle - (FOV / 2.0);
@@ -163,16 +161,13 @@ void	cast_rays(t_game *game)
 	{
 		/* ------------- DDA: lanzamos UN rayo ------------- */
 		distance = cast_single_ray(game, ray_angle, &ray_x, &ray_y, &side);
-		distance = cast_single_ray(game, ray_angle, &ray_x, &ray_y, &side);
+		distance *= cos(ray_angle - player_angle); /* corrección de distancia */
 		/* Altura en pantalla de la pared encontrada */
 		wall_height = (int)(WIN_HEIGHT / distance);
-		// if (wall_height > WIN_HEIGHT)
-		// 	wall_height = WIN_HEIGHT;
 		/* fracción de pared recorrida */
-		double wall_x;
-		if (side == 0)
+		if (side == 0) /* vertical */
 			wall_x = ray_y - floor(ray_y);
-		else
+		else /* horizontal */
 			wall_x = ray_x - floor(ray_x);
 		tex_x = (int)(wall_x * game->textures->width);
 		/* invertir la franja si miramos “desde detrás” */

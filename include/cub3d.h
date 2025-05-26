@@ -6,7 +6,7 @@
 /*   By: juanherr <juanherr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 12:37:51 by juanherr          #+#    #+#             */
-/*   Updated: 2025/05/26 15:31:42 by juanherr         ###   ########.fr       */
+/*   Updated: 2025/05/26 15:57:27 by juanherr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@
 # endif
 
 # define STEP 0.005
-# define MOVE_SPEED 0.1
+# define MOVE_SPEED 0.08
 
 # define FOV (M_PI / 3)
 # define NUM_RAYS WIN_WIDTH * 2
