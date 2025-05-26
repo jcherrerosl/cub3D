@@ -19,43 +19,83 @@ LIBS = $(MLX_LIB) $(LIBFT_LIB) -L$(LIBFT_DIR)/ft_printf -lftprintf $(X11_LIB)
 SRCS = $(wildcard $(SRC_DIR)/*.c)
 OBJS = $(patsubst $(SRC_DIR)/%.c,$(BUILD_DIR)/%.o,$(SRCS))
 
-$(NAME): $(OBJS) $(LIBFT_DIR)/libft.a $(MLX_DIR)/libmlx.a 
+COMPILED_FLAG = .compiled
+TOTAL = $(shell echo $(SRCS) | wc -w | tr -d " ")
+TOTAL_PLUS = $(shell echo $$(($(TOTAL) + 3)))
+
+all: reset_progress $(COMPILED_FLAG)
+
+$(COMPILED_FLAG): $(NAME)
+
+$(NAME): $(LIBFT_DIR)/libft.a $(LIBFT_DIR)/ft_printf/libftprintf.a $(MLX_DIR)/libmlx.a $(OBJS)
 	@$(CC) $(CFLAGS) -o $@ $^ $(LIBS)
+	@echo $$(( $(TOTAL_PLUS) - 1 )) > .progress_count
+	@$(MAKE) --no-print-directory update_progress TARGET="$(lastword $(OBJS))"
+	@rm -f .progress_count
+	@echo "\n\033[1;32m✔️ Build completed successfully\033[0m"
+	@touch $(COMPILED_FLAG)
+
+reset_progress:
+	@echo 0 > .progress_count
+
+update_progress:
+	@if [ ! -f .progress_count ]; then echo 0 > .progress_count; fi; \
+	count=$$(cat .progress_count); \
+	count=$$((count + 1)); \
+	echo $$count > .progress_count; \
+	total=$(TOTAL_PLUS); \
+	percent=$$((100 * count / total)); \
+	width=40; \
+	filled=$$((percent * width / 100)); \
+	bar=$$(printf "%$${filled}s" | tr " " "#"); \
+	spaces=$$(printf "%$$(($$width - $$filled))s"); \
+	printf "\r\033[1;32mBuilding %-30s [%s%s] %d%%\033[0m" $(TARGET) "$$bar" "$$spaces" "$$percent"
 
 $(BUILD_DIR)/%.o: $(SRC_DIR)/%.c 
 	@mkdir -p $(BUILD_DIR)
+	@$(MAKE) --no-print-directory update_progress TARGET="$<"
 	@$(CC) $(CFLAGS) $(INCLUDE) -c $< -o $@
 
 $(LIBFT_DIR)/libft.a:
-	@$(MAKE) -C $(LIBFT_DIR)
+	@$(MAKE) -C $(LIBFT_DIR) --no-print-directory > /dev/null 2>&1
+	@$(MAKE) --no-print-directory update_progress TARGET="libft.a"
 
-$(MLX_DIR)/libft/libftprintf.a:
-	@$(MAKE) -C $(LIBFT_DIR)/ft_printf
+$(LIBFT_DIR)/ft_printf/libftprintf.a:
+	@$(MAKE) -C $(LIBFT_DIR)/ft_printf --no-print-directory > /dev/null 2>&1
+	@$(MAKE) --no-print-directory update_progress TARGET="ftprintf.a"
 
 $(MLX_DIR)/libmlx.a:
-	@$(MAKE) -C $(MLX_DIR) || true
-
-all: $(NAME)
+	@$(MAKE) -C $(MLX_DIR) --no-print-directory > /dev/null 2>&1 || true
+	@$(MAKE) --no-print-directory update_progress TARGET="libmlx.a"
 
 clean:
-	@$(MAKE) -C $(LIBFT_DIR) clean
-	@$(MAKE) -C $(MLX_DIR) clean
-	@rm -rf $(BUILD_DIR)
+	@rm -rf $(BUILD_DIR) $(COMPILED_FLAG) .progress_count
+	@$(MAKE) -C $(LIBFT_DIR) clean --no-print-directory
+	@$(MAKE) -C $(LIBFT_DIR)/ft_printf clean --no-print-directory
+	@$(MAKE) -C $(MLX_DIR) clean --no-print-directory > /dev/null 2>&1
+	@$(MAKE) --no-print-directory clean_message
 
-fclean: clean
-	@$(MAKE) -C $(LIBFT_DIR) fclean
-	@$(MAKE) -C $(MLX_DIR) clean
+clean_message:
+	@echo "\033[0;34mCleaned!\033[0m"
+
+fclean:
+	@$(MAKE) -C $(LIBFT_DIR) fclean --no-print-directory
+	@$(MAKE) -C $(LIBFT_DIR)/ft_printf fclean --no-print-directory
 	@rm -f $(NAME)
-	@rm -rf $(BUILD_DIR)
+	@rm -rf $(BUILD_DIR) $(COMPILED_FLAG) .progress_count
+	@$(MAKE) -C $(MLX_DIR) clean --no-print-directory > /dev/null 2>&1
+	@echo "\033[0;34mFully cleaned! 🗑️\033[0m"
+
+
+re: fclean all
 
 commit: fclean
 	@git add .
 	@./commit.sh
-	@INPUT_VAR=$$(cat input.txt) && git commit -m "$(date):  $$INPUT_VAR" && rm -f input.txt
+	@INPUT_VAR=$$(cat input.txt) && git commit -m "$(shell date +"%Y-%m-%d %H:%M:%S"):  $$INPUT_VAR" && rm -f input.txt
 	@git push
 
-re:
-	@$(MAKE) fclean
-	@$(MAKE) all
+valgrind:
+	@valgrind --leak-check=full --track-origins=yes --show-leak-kinds=all ./$(NAME)
 
-.PHONY: all clean fclean re
+.PHONY: all clean fclean re commit valgrind update_progress reset_progress
