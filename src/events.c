@@ -6,7 +6,7 @@
 /*   By: juanherr <juanherr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/09 12:09:20 by juanherr          #+#    #+#             */
-/*   Updated: 2025/05/25 21:36:21 by juanherr         ###   ########.fr       */
+/*   Updated: 2025/05/26 15:34:25 by juanherr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,7 @@ int	render_frame(void *param)
 			draw_floor_and_ceiling(game); //fondo
 			cast_rays(game);
 			draw_minimap(game);           //encima
-			// draw weapon y objetivo
+			// draw weapon
 			mlx_put_image_to_window(game->img.mlx, game->img.win, game->img.img,
 					0, 0);
 			mlx_put_image_to_window(game->img.mlx, game->img.win, game->img.img,

@@ -6,7 +6,7 @@
 /*   By: juanherr <juanherr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 12:37:51 by juanherr          #+#    #+#             */
-/*   Updated: 2025/05/26 15:09:58 by juanherr         ###   ########.fr       */
+/*   Updated: 2025/05/26 15:31:42 by juanherr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,6 +128,23 @@ typedef struct s_render_info
 	char			*texture_data;
 }					t_render_info;
 
+typedef struct s_gun
+{
+	int		*gun_pixels;
+	int		*frame_buffer;
+	int		x_offset;
+	int		y_offset;
+	int		bpp1;
+	int		line_len1;
+	int		endian1;
+	int		bpp2;
+	int		line_len2;
+	int		endian2;
+	int		color;
+	int		x;
+	int		y;
+}	t_gun;
+
 typedef struct s_game
 {
 	t_settings		settings;
@@ -136,6 +153,7 @@ typedef struct s_game
 	t_key_state		*key_state;
 	t_textures		*textures;
 	t_render_info	render_info[WIN_WIDTH];
+	t_gun			*gun;
 	void			*intro_img;
 	int				intro_w;
 	int				intro_h;
