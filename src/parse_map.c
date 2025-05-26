@@ -6,7 +6,7 @@
 /*   By: juanherr <juanherr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 15:03:11 by juanherr          #+#    #+#             */
-/*   Updated: 2025/05/26 11:57:13 by juanherr         ###   ########.fr       */
+/*   Updated: 2025/05/26 15:52:42 by juanherr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,30 @@ static int	count_map_lines(const char *filename)
 	return (count);
 }
 
+static void	parse_map_chars(t_settings *s)
+{
+	int	y;
+	int	x;
+	char	c;
+
+	y = 0;
+	while (s->map[y])
+	{
+		x = 0;
+		while ((c = s->map[y][x]))
+		{
+			if (c != '1' && c != '0' && c != ' ' && !ft_strchr("NSEW", c))
+			{
+				printf("Invalid character '%c' at (%d, %d)\n", c, x, y);
+				ft_printerror("Invalid character in map\n");
+			}
+			x++;
+		}
+		y++;
+	}
+}
+
+
 void	parse_file(const char *filename, t_settings *s)
 {
 	int		fd;
@@ -107,6 +131,7 @@ void	parse_file(const char *filename, t_settings *s)
 	map[map_i] = NULL;
 	close(fd);
 	s->map = map;
+	parse_map_chars(s);
 	y = 0;
 	while (s->map[y])
 	{
