@@ -6,7 +6,7 @@
 /*   By: juanherr <juanherr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 15:03:11 by juanherr          #+#    #+#             */
-/*   Updated: 2025/05/26 15:55:32 by juanherr         ###   ########.fr       */
+/*   Updated: 2025/05/26 16:46:10 by juanherr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,11 +71,13 @@ static int	count_map_lines(const char *filename)
 
 static void	parse_map_chars(t_settings *s)
 {
-	int	y;
-	int	x;
+	int		y;
+	int		x;
 	char	c;
+	int		player_count;
 
 	y = 0;
+	player_count = 0;
 	while (s->map[y])
 	{
 		x = 0;
@@ -86,11 +88,50 @@ static void	parse_map_chars(t_settings *s)
 				printf("Invalid character '%c' at (%d, %d)\n", c, x, y);
 				ft_printerror("Invalid character in map\n");
 			}
+			if (ft_strchr("NSEW", c))
+				player_count++;
+			x++;
+		}
+		y++;
+	}
+	if (player_count != 1)
+		ft_printerror("Map must have exactly one player\n");
+}
+
+void	check_map_enclosed(t_settings *s)
+{
+	int		y;
+	int		x;
+	char	c;
+
+	y = 0;
+	while (s->map[y])
+	{
+		x = 0;
+		while ((c = s->map[y][x]))
+		{
+			if (c == '0' || ft_strchr("NSEW", c))
+			{
+				// vecinos
+				if (!s->map[y + 1] || !s->map[y - 1] ||
+					x >= (int)ft_strlen(s->map[y + 1]) ||
+					x >= (int)ft_strlen(s->map[y - 1]) ||
+					s->map[y - 1][x] == ' ' ||
+					s->map[y + 1][x] == ' ' ||
+					x == 0 || s->map[y][x - 1] == ' ' ||
+					s->map[y][x + 1] == ' ' || s->map[y][x + 1] == '\0')
+				{
+					printf("Open map at (%d, %d)\n", x, y);
+					ft_printerror("Map is not properly enclosed\n");
+				}
+			}
 			x++;
 		}
 		y++;
 	}
 }
+
+
 
 void	parse_file(const char *filename, t_settings *s)
 {
@@ -131,6 +172,7 @@ void	parse_file(const char *filename, t_settings *s)
 	close(fd);
 	s->map = map;
 	parse_map_chars(s);
+	check_map_enclosed(s);
 	y = 0;
 	while (s->map[y])
 	{
@@ -144,33 +186,6 @@ void	parse_file(const char *filename, t_settings *s)
 					break ;
 				store_player(s, x, y, c);
 				return ;
-			}
-			x++;
-		}
-		y++;
-	}
-}
-
-void    check_walls(t_settings *s)
-{
-	int y;
-	int x;
-
-	y = 0;
-	while (s->map[y])
-	{
-		x = 0;
-		while (s->map[y][x])
-		{
-			if (s->map[y][x] == '1')
-			{
-				if ((y == 0 || !s->map[y - 1] || s->map[y - 1][x] != '1') ||
-					(s->map[y + 1] && s->map[y + 1][x] != '1') ||
-					(x == 0 || s->map[y][x - 1] != '1') ||
-					(s->map[y][x + 1] && s->map[y][x + 1] != '1'))
-				{
-					ft_printerror("Map is not surrounded by walls\n");
-				}
 			}
 			x++;
 		}
