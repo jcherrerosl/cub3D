@@ -6,7 +6,7 @@
 /*   By: juanherr <juanherr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/10 23:22:51 by juanherr          #+#    #+#             */
-/*   Updated: 2025/05/26 11:51:37 by juanherr         ###   ########.fr       */
+/*   Updated: 2025/05/26 15:18:31 by juanherr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -166,8 +166,8 @@ void	cast_rays(t_game *game)
 		distance = cast_single_ray(game, ray_angle, &ray_x, &ray_y, &side);
 		/* Altura en pantalla de la pared encontrada */
 		wall_height = (int)(WIN_HEIGHT / distance);
-		if (wall_height > WIN_HEIGHT)
-			wall_height = WIN_HEIGHT;
+		// if (wall_height > WIN_HEIGHT)
+		// 	wall_height = WIN_HEIGHT;
 		/* fracción de pared recorrida */
 		double wall_x;
 		if (side == 0)
