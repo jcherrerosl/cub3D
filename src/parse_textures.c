@@ -6,7 +6,7 @@
 /*   By: juanherr <juanherr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 10:33:09 by juanherr          #+#    #+#             */
-/*   Updated: 2025/05/15 10:44:37 by juanherr         ###   ########.fr       */
+/*   Updated: 2025/05/26 14:44:51 by juanherr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,26 +15,27 @@
 int	parse_color(char *str, int *rgb)
 {
 	char	**parts;
+	char	*trim;
 	int		i;
 
 	parts = ft_split(str, ',');
 	if (!parts)
 		return (0);
+	if (!parts[0] || !parts[1] || !parts[2] || parts[3])
+		return (free_matrix(parts), 0);
 	i = 0;
 	while (i < 3)
 	{
-		if (!parts[i] || !ft_isdigit_str(parts[i]))
-		{
-			free_matrix(parts);
-			return (0);
-		}
-		rgb[i] = ft_atoi(parts[i]);
+		trim = ft_strtrim(parts[i], " \t\n\r");
+		if (!trim || !*trim)
+			return (free(trim), free_matrix(parts), 0);
+		if (!ft_isdigit_str(trim))
+			return (free(trim), free_matrix(parts), 0);
+		rgb[i] = ft_atoi(trim);
+		free(trim);
 		if (rgb[i] < 0 || rgb[i] > 255)
-		{
-			free_matrix(parts);
-			return (0);
-		}
-		i++;
+			return (free_matrix(parts), 0);
+		++i;
 	}
 	free_matrix(parts);
 	return (1);
