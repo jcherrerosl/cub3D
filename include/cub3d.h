@@ -6,7 +6,7 @@
 /*   By: juanherr <juanherr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 12:37:51 by juanherr          #+#    #+#             */
-/*   Updated: 2025/05/25 21:33:34 by juanherr         ###   ########.fr       */
+/*   Updated: 2025/05/26 11:57:28 by juanherr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -164,6 +164,7 @@ int					check_extension(const char *filename);
 int					is_map_line(char *line);
 void				store_player(t_settings *s, int x, int y, char dir);
 void				parse_file(const char *filename, t_settings *s);
+void				check_walls(t_settings *s);
 
 //render.c
 void				draw_pixel(t_img *img, int x, int y, int color);

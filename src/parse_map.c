@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_map.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aloiki <aloiki@student.42.fr>              +#+  +:+       +#+        */
+/*   By: juanherr <juanherr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 15:03:11 by juanherr          #+#    #+#             */
-/*   Updated: 2025/05/21 21:21:32 by aloiki           ###   ########.fr       */
+/*   Updated: 2025/05/26 11:57:13 by juanherr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,6 +120,33 @@ void	parse_file(const char *filename, t_settings *s)
 					break ;
 				store_player(s, x, y, c);
 				return ;
+			}
+			x++;
+		}
+		y++;
+	}
+}
+
+void    check_walls(t_settings *s)
+{
+	int y;
+	int x;
+
+	y = 0;
+	while (s->map[y])
+	{
+		x = 0;
+		while (s->map[y][x])
+		{
+			if (s->map[y][x] == '1')
+			{
+				if ((y == 0 || !s->map[y - 1] || s->map[y - 1][x] != '1') ||
+					(s->map[y + 1] && s->map[y + 1][x] != '1') ||
+					(x == 0 || s->map[y][x - 1] != '1') ||
+					(s->map[y][x + 1] && s->map[y][x + 1] != '1'))
+				{
+					ft_printerror("Map is not surrounded by walls\n");
+				}
 			}
 			x++;
 		}

@@ -6,7 +6,7 @@
 /*   By: juanherr <juanherr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/10 23:22:51 by juanherr          #+#    #+#             */
-/*   Updated: 2025/05/25 21:38:01 by juanherr         ###   ########.fr       */
+/*   Updated: 2025/05/26 11:51:37 by juanherr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,8 +70,15 @@ double	cast_single_ray(t_game *game, double ray_angle, double *ray_x,
 	map_x = (int)pos_x;
 	map_y = (int)pos_y;
 	/* 4. Distancias entre grid-lines */
-	delta_x = (dir_x == 0) ? 1e30 : fabs(1.0 / dir_x);
-	delta_y = (dir_y == 0) ? 1e30 : fabs(1.0 / dir_y);
+	if (dir_x == 0)
+		delta_x = 1e30;
+	else
+		delta_x = fabs(1.0 / dir_x);
+
+	if (dir_y == 0)
+		delta_y = 1e30;
+	else
+		delta_y = fabs(1.0 / dir_y);
 	/* 5. Distancia hasta **la PRÓXIMA** grid-line en cada eje */
 	if (dir_x < 0)
 	{
@@ -162,8 +169,11 @@ void	cast_rays(t_game *game)
 		if (wall_height > WIN_HEIGHT)
 			wall_height = WIN_HEIGHT;
 		/* fracción de pared recorrida */
-		double wall_x = (side == 0) ? (ray_y - floor(ray_y))
-									: (ray_x - floor(ray_x));
+		double wall_x;
+		if (side == 0)
+			wall_x = ray_y - floor(ray_y);
+		else
+			wall_x = ray_x - floor(ray_x);
 		tex_x = (int)(wall_x * game->textures->width);
 		/* invertir la franja si miramos “desde detrás” */
 		if ((side == 0 && cos(ray_angle) < 0) ||
@@ -171,9 +181,19 @@ void	cast_rays(t_game *game)
 			tex_x = game->textures->width - tex_x - 1;
 		/* elegir textura coherente (ver tabla anterior) */
 		if (side == 0) /* vertical */
-			r.texture_data = (cos(ray_angle) > 0) ? game->textures->we_data : game->textures->ea_data;
+		{
+			if (cos(ray_angle) > 0)
+				r.texture_data = game->textures->we_data;
+			else
+				r.texture_data = game->textures->ea_data;
+		}
 		else /* horizontal */
-			r.texture_data = (sin(ray_angle) > 0) ? game->textures->no_data : game->textures->so_data;
+		{
+			if (sin(ray_angle) > 0)
+				r.texture_data = game->textures->no_data;
+			else
+				r.texture_data = game->textures->so_data;
+		}
 		/* ------------- Lanzamos la columna a la rutina de pintado ------------- */
 		r.x = x;
 		r.tex_x = tex_x;

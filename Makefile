@@ -48,6 +48,12 @@ fclean: clean
 	@rm -f $(NAME)
 	@rm -rf $(BUILD_DIR)
 
+commit: fclean
+	@git add .
+	@./commit.sh
+	@INPUT_VAR=$$(cat input.txt) && git commit -m "$(date):  $$INPUT_VAR" && rm -f input.txt
+	@git push
+
 re:
 	@$(MAKE) fclean
 	@$(MAKE) all
