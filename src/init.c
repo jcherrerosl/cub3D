@@ -6,7 +6,7 @@
 /*   By: juanherr <juanherr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 15:34:00 by juanherr          #+#    #+#             */
-/*   Updated: 2025/05/21 20:31:31 by juanherr         ###   ########.fr       */
+/*   Updated: 2025/05/28 13:46:15 by juanherr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,6 +111,10 @@ void	init_game(t_game *game)
 	init_camera(game->camera);
 	game->key_state = init_key_state(game);
 	game->textures = init_textures(game);
+	game->last_ms = now_ms();
+	game->dt = 0.0;
+	game->move_speed = 3.0; /* tiles/s  */
+	game->rot_speed = 2.5;  /* rad/s    */
 	init_gun_sprite(game);
 }
 

@@ -6,7 +6,7 @@
 /*   By: juanherr <juanherr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 10:33:09 by juanherr          #+#    #+#             */
-/*   Updated: 2025/05/26 14:44:51 by juanherr         ###   ########.fr       */
+/*   Updated: 2025/05/28 13:57:05 by juanherr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,22 +41,33 @@ int	parse_color(char *str, int *rgb)
 	return (1);
 }
 
-void	draw_floor_and_ceiling(t_game *game)
+void	draw_floor_and_ceiling(t_game *g)
 {
-	int	x;
+	int	*buf;
+	int	pitch;
 	int	y;
-
+	int	x;
+	
+	buf = (int *)g->img.addr;
+	pitch = g->img.line_len / 4;
+	int top_color =
+		(g->settings.ceiling_rgb[0] << 16) |
+		(g->settings.ceiling_rgb[1] << 8) |
+		g->settings.ceiling_rgb[2];
+	int bot_color =
+		(g->settings.floor_rgb[0] << 16) |
+		(g->settings.floor_rgb[1] << 8) |
+		g->settings.floor_rgb[2];
 	y = 0;
 	while (y < WIN_HEIGHT / 2)
 	{
 		x = 0;
 		while (x < WIN_WIDTH)
 		{
-			draw_pixel(&game->img, x, y,
-					(game->settings.ceiling_rgb[0] << 16) | (game->settings.ceiling_rgb[1] << 8) | game->settings.ceiling_rgb[2]);
-			x++;
+			buf[y * pitch + x] = top_color;
+			++x;
 		}
-		y++;
+		++y;
 	}
 	y = WIN_HEIGHT / 2;
 	while (y < WIN_HEIGHT)
@@ -64,10 +75,9 @@ void	draw_floor_and_ceiling(t_game *game)
 		x = 0;
 		while (x < WIN_WIDTH)
 		{
-			draw_pixel(&game->img, x, y,
-					(game->settings.floor_rgb[0] << 16) | (game->settings.floor_rgb[1] << 8) | game->settings.floor_rgb[2]);
-			x++;
+			buf[y * pitch + x] = bot_color;
+			++x;
 		}
-		y++;
+		++y;
 	}
 }

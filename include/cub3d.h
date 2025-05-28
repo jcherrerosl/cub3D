@@ -6,7 +6,7 @@
 /*   By: juanherr <juanherr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 12:37:51 by juanherr          #+#    #+#             */
-/*   Updated: 2025/05/26 16:54:45 by juanherr         ###   ########.fr       */
+/*   Updated: 2025/05/28 14:02:48 by juanherr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,10 @@
 # include <fcntl.h>
 # include <math.h>
 # include <stdio.h>
+# include <sys/time.h>
 
-# define WIN_WIDTH 1280
-# define WIN_HEIGHT 720
+# define WIN_WIDTH 1920
+# define WIN_HEIGHT 1080
 
 # define MINIMAP_RATIO 0.5
 # define MINIMAP_TILE TILE_SIZE *MINIMAP_RATIO
@@ -32,7 +33,11 @@
 #  define M_PI 3.14159265358979323846
 # endif
 
-# define STEP 0.005
+# ifndef M_PI_2
+#  define M_PI_2 1.57079632679489661923
+# endif
+
+//# define STEP 0.005
 # define MOVE_SPEED 0.08
 
 # define FOV (M_PI / 3)
@@ -161,6 +166,10 @@ typedef struct s_game
 	int				gun_height;
 	int				started;
 	int				start_frame;
+	double  last_ms;        /* marca de tiempo del frame anterior   */
+    double  dt;             /* Δt en segundos                        */
+    double  move_speed;     /* tiles por segundo (p.ej. 3.0)         */
+    double  rot_speed;      /* radianes por segundo (p.ej. 2.5)      */
 }					t_game;
 
 //init.c
@@ -174,6 +183,8 @@ int					close_window(void *param);
 int					render_frame(void *param);
 int					key_press(int keycode, t_game *game);
 int					key_release(int keycode, t_game *game);
+double  now_ms(void);
+
 
 //parse_map.c
 int					check_extension(const char *filename);

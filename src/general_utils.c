@@ -6,7 +6,7 @@
 /*   By: juanherr <juanherr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 10:34:23 by juanherr          #+#    #+#             */
-/*   Updated: 2025/05/15 10:41:09 by juanherr         ###   ########.fr       */
+/*   Updated: 2025/05/28 13:42:38 by juanherr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,4 +41,11 @@ void	free_matrix(char **matrix)
 		i++;
 	}
 	free(matrix);
+}
+
+double  now_ms(void)
+{
+    struct timeval tv;
+    gettimeofday(&tv, NULL);
+    return tv.tv_sec * 1000.0 + tv.tv_usec / 1000.0;
 }

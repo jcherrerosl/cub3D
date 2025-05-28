@@ -6,7 +6,7 @@
 /*   By: juanherr <juanherr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/09 12:09:20 by juanherr          #+#    #+#             */
-/*   Updated: 2025/05/26 15:34:25 by juanherr         ###   ########.fr       */
+/*   Updated: 2025/05/28 13:56:53 by juanherr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,47 +64,38 @@ int	close_window(void *param)
 	exit(0);
 }
 
-int	render_frame(void *param)
+void	draw_intro(t_game *game)
 {
-	t_game	*game;
-
-	game = (t_game *)param;
 	if (!game->started)
 	{
-		mlx_clear_window(game->img.mlx, game->img.win);
 		mlx_put_image_to_window(game->img.mlx, game->img.win, game->intro_img,
-				(WIN_WIDTH - game->intro_w) / 2, (WIN_HEIGHT - game->intro_h)
-				/ 2);
+				0, 0);
+		game->start_frame++;
 	}
 	else
 	{
-		ft_memset(game->img.addr, 0, WIN_WIDTH * WIN_HEIGHT * (game->img.bpp
-					/ 8));
-		if (game->start_frame < 120)
-		{
-			mlx_clear_window(game->img.mlx, game->img.win);
-			mlx_string_put(game->img.mlx, game->img.win, 580, 350, 0xAAAAAA,
-					"Game starting...");
-			game->start_frame++;
-		}
-		else
-		{
-			handle_movement(game);
-			ft_memset(game->img.addr, 0, WIN_WIDTH * WIN_HEIGHT * (game->img.bpp
-						/ 8));
-			//	draw_map(game);								//orden por capas inverso (al final)
-			draw_floor_and_ceiling(game); //fondo
-			cast_rays(game);
-			draw_minimap(game);           //encima
-			// draw weapon
-			mlx_put_image_to_window(game->img.mlx, game->img.win, game->img.img,
-					0, 0);
-			mlx_put_image_to_window(game->img.mlx, game->img.win, game->img.img,
-					0, 0);
-			draw_gun(game, game->img.img);
-			mlx_put_image_to_window(game->img.mlx, game->img.win, game->img.img,
-					0, 0);
-		}
+		game->started = 1;
+		game->start_frame = 0;
 	}
+}
+
+int	render_frame(void *param)
+{
+	t_game	*g;
+	double	now;
+
+	g = (t_game *)param;
+	now = now_ms();
+	g->dt = (now - g->last_ms) / 1000.0; /* segundos        */
+	g->last_ms = now;
+	if (!g->started)
+		return (draw_intro(g), 0);
+	handle_movement(g);
+	ft_memset(g->img.addr, 0, WIN_WIDTH * WIN_HEIGHT * (g->img.bpp / 8));
+	draw_floor_and_ceiling(g);
+	cast_rays(g);
+	draw_minimap(g);
+	draw_gun(g, g->img.img);
+	mlx_put_image_to_window(g->img.mlx, g->img.win, g->img.img, 0, 0);
 	return (0);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   movement.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aloiki <aloiki@student.42.fr>              +#+  +:+       +#+        */
+/*   By: juanherr <juanherr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/14 15:57:25 by aloiki            #+#    #+#             */
-/*   Updated: 2025/05/21 21:32:47 by aloiki           ###   ########.fr       */
+/*   Updated: 2025/05/28 13:46:49 by juanherr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,42 +41,44 @@ static void	collision_check(t_game *game, double new_x, double new_y)
 		game->settings.player_y = new_y;
 }
 
-void	handle_movement(t_game *game)
+void	handle_movement(t_game *g)
 {
 	double	angle;
-	double	new_x;
-	double	new_y;
+	double	nx;
+	double	ny;
 
-	angle = game->settings.player_angle;
-	new_x = game->settings.player_x;
-	new_y = game->settings.player_y;
-	if (game->key_state->w)
+	double step = g->move_speed * g->dt; /* avance lateral/frontal        */
+	double rot = g->rot_speed * g->dt;   /* giro izquierda/derecha        */
+	angle = g->settings.player_angle;
+	nx = g->settings.player_x;
+	ny = g->settings.player_y;
+	if (g->key_state->w)
 	{
-		new_x += cos(angle) * MOVE_SPEED;
-		new_y += sin(angle) * MOVE_SPEED;
+		nx += cos(angle) * step;
+		ny += sin(angle) * step;
 	}
-	if (game->key_state->s)
+	if (g->key_state->s)
 	{
-		new_x -= cos(angle) * MOVE_SPEED;
-		new_y -= sin(angle) * MOVE_SPEED;
+		nx -= cos(angle) * step;
+		ny -= sin(angle) * step;
 	}
-	if (game->key_state->d)
+	if (g->key_state->d)
 	{
-		new_x += cos(angle + M_PI / 2) * MOVE_SPEED;
-		new_y += sin(angle + M_PI / 2) * MOVE_SPEED;
+		nx += cos(angle + M_PI_2) * step;
+		ny += sin(angle + M_PI_2) * step;
 	}
-	if (game->key_state->a)
+	if (g->key_state->a)
 	{
-		new_x += cos(angle - M_PI / 2) * MOVE_SPEED;
-		new_y += sin(angle - M_PI / 2) * MOVE_SPEED;
+		nx += cos(angle - M_PI_2) * step;
+		ny += sin(angle - M_PI_2) * step;
 	}
-	collision_check(game, new_x, new_y);
-	if (game->key_state->left)
-		game->settings.player_angle -= 0.05;
-	if (game->key_state->right)
-		game->settings.player_angle += 0.05;
-	if (game->settings.player_angle < 0)
-		game->settings.player_angle += 2 * M_PI;
-	if (game->settings.player_angle >= 2 * M_PI)
-		game->settings.player_angle -= 2 * M_PI;
+	collision_check(g, nx, ny);
+	if (g->key_state->left)
+		g->settings.player_angle -= rot;
+	if (g->key_state->right)
+		g->settings.player_angle += rot;
+	if (g->settings.player_angle < 0)
+		g->settings.player_angle += 2 * M_PI;
+	if (g->settings.player_angle >= 2 * M_PI)
+		g->settings.player_angle -= 2 * M_PI;
 }
