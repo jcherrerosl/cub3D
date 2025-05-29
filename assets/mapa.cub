@@ -1,7 +1,7 @@
-NO assets/textures/leaking_wall0.xpm
-SO assets/textures/leaking_wall01.xpm
-WE assets/textures/leaking_wall02.xpm
-EA assets/textures/leaking_wall03.xpm
+NO assets/textures/leaking_wall.xpm
+SO assets/textures/leaking_wall2.xpm
+WE assets/textures/leaking_wall3.xpm
+EA assets/textures/leaking_wall4.xpm
 
 F 40, 40, 40
 C 0, 255, 255

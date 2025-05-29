@@ -3,16 +3,16 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: juanherr <juanherr@student.42madrid.com    +#+  +:+       +#+         #
+#    By: juanherr <juanherr@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/09/29 23:13:11 by juanherr          #+#    #+#              #
-#    Updated: 2024/10/27 11:25:40 by juanherr         ###   ########.fr        #
+#    Updated: 2025/05/27 15:47:58 by juanherr         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 CC = cc
 
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror -fPIC
 
 NAME = libftprintf.a
 

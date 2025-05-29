@@ -6,7 +6,7 @@
 /*   By: juanherr <juanherr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 12:37:51 by juanherr          #+#    #+#             */
-/*   Updated: 2025/05/28 14:44:39 by juanherr         ###   ########.fr       */
+/*   Updated: 2025/05/29 13:26:42 by juanherr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@
 
 //# define STEP 0.005
 # define MOVE_SPEED 3 // tiles per second
-# define ROT_SPEED 1 // radians per second
+# define ROT_SPEED 1  // radians per second
 
 # define FOV (M_PI / 3)
 # define NUM_RAYS WIN_WIDTH * 2
@@ -167,34 +167,33 @@ typedef struct s_game
 	int				gun_height;
 	int				started;
 	int				start_frame;
-	double  last_ms;        /* marca de tiempo del frame anterior   */
-    double  dt;             /* Δt en segundos                        */
-    double  move_speed;     /* tiles por segundo (p.ej. 3.0)         */
-    double  rot_speed;      /* radianes por segundo (p.ej. 2.5)      */
+	double			last_ms;
+	double			dt;
+	double			move_speed;
+	double			rot_speed;
 }					t_game;
 
-//init.c
+// init.c
 void				init_settings(t_settings *settings);
 void				init_game(t_game *game);
 void				init_gun_sprite(t_game *game);
 
-//events.c
+// events.c
 int					key_handler(int key, void *param);
 int					close_window(void *param);
 int					render_frame(void *param);
 int					key_press(int keycode, t_game *game);
 int					key_release(int keycode, t_game *game);
-double  now_ms(void);
+double				now_ms(void);
 
-
-//parse_map.c
+// parse_map.c
 int					check_extension(const char *filename);
 int					is_map_line(char *line);
 void				store_player(t_settings *s, int x, int y, char dir);
 void				parse_file(const char *filename, t_settings *s);
 void				check_walls(t_settings *s);
 
-//render.c
+// render.c
 void				draw_pixel(t_img *img, int x, int y, int color);
 void				draw_tile(t_img *img, int x, int y, int color);
 void				draw_map(t_game *game);
