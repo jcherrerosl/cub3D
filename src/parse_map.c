@@ -6,7 +6,7 @@
 /*   By: juanherr <juanherr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 15:03:11 by juanherr          #+#    #+#             */
-/*   Updated: 2025/05/26 16:52:56 by juanherr         ###   ########.fr       */
+/*   Updated: 2025/06/03 18:38:01 by juanherr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ int	is_map_line(char *line)
 	int	i;
 
 	i = 0;
-	while (line[i] == ' ')
+	while (line[i] == ' ' || line[i] == '\t')
 		i++;
 	return (line[i] == '1' || line[i] == '0' || ft_strchr("NSEW", line[i]));
 }
@@ -60,13 +60,35 @@ static int	count_map_lines(const char *filename)
 	line = get_next_line(fd);
 	while (line)
 	{
-		if (is_map_line(line))
-			count++;
+		count++;
 		free(line);
 		line = get_next_line(fd);
 	}
 	close(fd);
 	return (count);
+}
+
+int	in_map(t_settings *s)
+{
+	int	y;
+
+	// y = 0;
+	// while (s->map[y])
+	// {
+	// 	printf("Map line %d: %s\n", y, s->map[y]);
+	// 	y++;
+	// }
+	y = 0;
+	while (!ft_strchr(s->map[y], '1'))
+		y++;
+	while (s->map[y])
+	{
+//		ft_printf("y is %d\n", y);
+		if (!ft_strchr(s->map[y], '1'))
+			ft_printerror("Map contains empty lines 1\n");
+		y++;
+	}
+	return (y);
 }
 
 static void	parse_map_chars(t_settings *s)
@@ -84,10 +106,7 @@ static void	parse_map_chars(t_settings *s)
 		while ((c = s->map[y][x]))
 		{
 			if (c != '1' && c != '0' && c != ' ' && !ft_strchr("NSEW", c))
-			{
-				printf("Invalid character '%c' at (%d, %d)\n", c, x, y);
 				ft_printerror("Invalid character in map\n");
-			}
 			if (ft_strchr("NSEW", c))
 				player_count++;
 			x++;
@@ -119,9 +138,7 @@ void	check_map_enclosed(t_settings *s)
 					s->map[y + 1][x] == ' ' ||
 					x == 0 || s->map[y][x - 1] == ' ' ||
 					s->map[y][x + 1] == ' ' || s->map[y][x + 1] == '\0')
-				{
 					ft_printerror("Map is not properly enclosed\n");
-				}
 			}
 			x++;
 		}
@@ -159,14 +176,18 @@ void	parse_file(const char *filename, t_settings *s)
 			parse_color(line + 2, s->floor_rgb);
 		else if (ft_strncmp(line, "C ", 2) == 0)
 			parse_color(line + 2, s->ceiling_rgb);
-		else if (is_map_line(line))
+		else if (1)
+		{
+	//		printf("LINE %d: %s", map_i, line);
 			map[map_i++] = ft_strtrim(line, "\n");
+		}
 		free(line);
 		line = get_next_line(fd);
 	}
 	map[map_i] = NULL;
 	close(fd);
 	s->map = map;
+	in_map(s);
 	parse_map_chars(s);
 	check_map_enclosed(s);
 	y = 0;
