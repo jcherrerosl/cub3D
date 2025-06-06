@@ -6,11 +6,19 @@
 /*   By: juanherr <juanherr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/26 15:29:29 by juanherr          #+#    #+#             */
-/*   Updated: 2025/05/26 15:33:43 by juanherr         ###   ########.fr       */
+/*   Updated: 2025/06/06 18:10:07 by juanherr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
+
+void	init_gun_sprite(t_game *game)
+{
+	game->gun_img = mlx_xpm_file_to_image(game->img.mlx, "./assets/gun.xpm",
+			&game->gun_width, &game->gun_height);
+	if (!game->gun_img)
+		ft_printerror("Could not load gun.xpm");
+}
 
 static void	get_offsets(t_game *game, t_gun *g)
 {

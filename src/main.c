@@ -6,7 +6,7 @@
 /*   By: juanherr <juanherr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/09 12:09:28 by juanherr          #+#    #+#             */
-/*   Updated: 2025/05/21 20:29:23 by juanherr         ###   ########.fr       */
+/*   Updated: 2025/06/06 18:12:58 by juanherr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,8 @@ int	main(int argc, char **argv)
 	parse_file(argv[1], &game.settings);
 	init_game(&game);
 	game.started = 0;
-	game.intro_img = mlx_xpm_file_to_image(
-		game.img.mlx, "assets/intro.xpm", &game.intro_w, &game.intro_h);
+	game.intro_img = mlx_xpm_file_to_image(game.img.mlx, "assets/intro.xpm",
+			&game.intro_w, &game.intro_h);
 	if (!game.intro_img)
 		ft_printerror("Could not load intro image\n");
 	mlx_loop_hook(game.img.mlx, render_frame, &game);

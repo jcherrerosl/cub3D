@@ -6,52 +6,11 @@
 /*   By: juanherr <juanherr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 15:34:00 by juanherr          #+#    #+#             */
-/*   Updated: 2025/05/28 14:45:02 by juanherr         ###   ########.fr       */
+/*   Updated: 2025/06/06 18:11:16 by juanherr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
-
-static t_textures	*init_textures(t_game *game)
-{
-	t_textures	*textures;
-
-	textures = malloc(sizeof(t_textures));
-	if (!textures)
-		ft_printerror("Could not allocate memory for textures");
-	textures->width = 256;
-	textures->height = 256;
-	textures->no = mlx_xpm_file_to_image(game->img.mlx,
-											game->settings.no,
-											&textures->width,
-											&textures->height);
-	textures->so = mlx_xpm_file_to_image(game->img.mlx,
-											game->settings.so,
-											&textures->width,
-											&textures->height);
-	textures->we = mlx_xpm_file_to_image(game->img.mlx,
-											game->settings.we,
-											&textures->width,
-											&textures->height);
-	textures->ea = mlx_xpm_file_to_image(game->img.mlx,
-											game->settings.ea,
-											&textures->width,
-											&textures->height);
-	if (!textures->no || !textures->so || !textures->we || !textures->ea)
-		ft_printerror("Could not load textures");
-	textures->no_data = mlx_get_data_addr(textures->no, &textures->bpp,
-			&textures->line_len, &textures->endian);
-	textures->so_data = mlx_get_data_addr(textures->so, &textures->bpp,
-			&textures->line_len, &textures->endian);
-	textures->we_data = mlx_get_data_addr(textures->we, &textures->bpp,
-			&textures->line_len, &textures->endian);
-	textures->ea_data = mlx_get_data_addr(textures->ea, &textures->bpp,
-			&textures->line_len, &textures->endian);
-	if (!textures->no_data || !textures->so_data || !textures->we_data
-		|| !textures->ea_data)
-		ft_printerror("Could not get data address for textures");
-	return (textures);
-}
 
 static t_key_state	*init_key_state(t_game *game)
 {
@@ -89,20 +48,14 @@ void	init_game(t_game *game)
 {
 	game->img.mlx = mlx_init();
 	if (!game->img.mlx)
-	{
 		ft_printerror("Could not initialize mlx");
-	}
 	game->img.win = mlx_new_window(game->img.mlx, WIN_WIDTH, WIN_HEIGHT,
 			"Cub3D");
 	if (!game->img.win)
-	{
 		ft_printerror("Could not create window");
-	}
 	game->img.img = mlx_new_image(game->img.mlx, WIN_WIDTH, WIN_HEIGHT);
-	game->img.addr = mlx_get_data_addr(game->img.img,
-										&game->img.bpp,
-										&game->img.line_len,
-										&game->img.endian);
+	game->img.addr = mlx_get_data_addr(game->img.img, &game->img.bpp,
+			&game->img.line_len, &game->img.endian);
 	game->started = 0;
 	game->start_frame = 0;
 	game->camera = malloc(sizeof(t_camera));
@@ -116,15 +69,4 @@ void	init_game(t_game *game)
 	game->move_speed = MOVE_SPEED;
 	game->rot_speed = ROT_SPEED;
 	init_gun_sprite(game);
-}
-
-void	init_gun_sprite(t_game *game)
-{
-	game->gun_img = mlx_xpm_file_to_image(
-		game->img.mlx,
-		"./assets/gun.xpm",
-		&game->gun_width,
-		&game->gun_height);
-	if (!game->gun_img)
-		ft_printerror("Could not load gun.xpm");
 }

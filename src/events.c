@@ -6,7 +6,7 @@
 /*   By: juanherr <juanherr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/09 12:09:20 by juanherr          #+#    #+#             */
-/*   Updated: 2025/05/29 12:47:06 by juanherr         ###   ########.fr       */
+/*   Updated: 2025/06/06 18:05:26 by juanherr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ void	draw_intro(t_game *game)
 	if (!game->started)
 	{
 		mlx_put_image_to_window(game->img.mlx, game->img.win, game->intro_img,
-				0, 0);
+			0, 0);
 		game->start_frame++;
 	}
 	else
@@ -86,7 +86,7 @@ int	render_frame(void *param)
 
 	g = (t_game *)param;
 	now = now_ms();
-	g->dt = (now - g->last_ms) / 1000.0; /* segundos        */
+	g->dt = (now - g->last_ms) / 1000.0;
 	g->last_ms = now;
 	if (!g->started)
 		return (draw_intro(g), 0);

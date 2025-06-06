@@ -6,7 +6,7 @@
 /*   By: juanherr <juanherr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 12:37:51 by juanherr          #+#    #+#             */
-/*   Updated: 2025/06/06 17:47:42 by juanherr         ###   ########.fr       */
+/*   Updated: 2025/06/06 18:11:53 by juanherr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -184,6 +184,9 @@ typedef struct s_game
 void				init_settings(t_settings *settings);
 void				init_game(t_game *game);
 void				init_gun_sprite(t_game *game);
+
+// init_textures.c
+t_textures	*init_textures(t_game *game);
 
 // events.c
 int					key_handler(int key, void *param);

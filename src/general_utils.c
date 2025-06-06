@@ -6,7 +6,7 @@
 /*   By: juanherr <juanherr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 10:34:23 by juanherr          #+#    #+#             */
-/*   Updated: 2025/05/28 13:42:38 by juanherr         ###   ########.fr       */
+/*   Updated: 2025/06/06 18:05:47 by juanherr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ void	free_matrix(char **matrix)
 	int	i;
 
 	if (!matrix)
-		return;
+		return ;
 	i = 0;
 	while (matrix[i])
 	{
@@ -43,9 +43,10 @@ void	free_matrix(char **matrix)
 	free(matrix);
 }
 
-double  now_ms(void)
+double	now_ms(void)
 {
-    struct timeval tv;
-    gettimeofday(&tv, NULL);
-    return tv.tv_sec * 1000.0 + tv.tv_usec / 1000.0;
+	struct timeval	tv;
+
+	gettimeofday(&tv, NULL);
+	return (tv.tv_sec * 1000.0 + tv.tv_usec / 1000.0);
 }
