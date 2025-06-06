@@ -6,7 +6,7 @@
 /*   By: juanherr <juanherr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 15:03:11 by juanherr          #+#    #+#             */
-/*   Updated: 2025/06/03 18:38:01 by juanherr         ###   ########.fr       */
+/*   Updated: 2025/06/06 18:03:15 by juanherr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,11 +83,18 @@ int	in_map(t_settings *s)
 		y++;
 	while (s->map[y])
 	{
-//		ft_printf("y is %d\n", y);
-		if (!ft_strchr(s->map[y], '1'))
-			ft_printerror("Map contains empty lines 1\n");
+		if (!ft_strchr(s->map[y], '1') && !ft_strchr(s->map[y], '\n'))
+			ft_printerror("Map must be at the end of the map file\n");
+		else if (!ft_strchr(s->map[y], '1'))
+		{
+			ft_printerror("Map contains empty lines\n");
+		}
+	//	printf("Map line %d: %s\n", y, s->map[y]);
 		y++;
 	}
+	//printf("Map ends at line %d\n", y - 1);
+	if (s->map[y])
+		ft_printerror("Map must be at the end of the map file\n");
 	return (y);
 }
 
@@ -131,19 +138,19 @@ void	check_map_enclosed(t_settings *s)
 		{
 			if (c == '0' || ft_strchr("NSEW", c))
 			{
-				if (!s->map[y + 1] || !s->map[y - 1] ||
-					x >= (int)ft_strlen(s->map[y + 1]) ||
-					x >= (int)ft_strlen(s->map[y - 1]) ||
-					s->map[y - 1][x] == ' ' ||
-					s->map[y + 1][x] == ' ' ||
-					x == 0 || s->map[y][x - 1] == ' ' ||
-					s->map[y][x + 1] == ' ' || s->map[y][x + 1] == '\0')
+				if (!s->map[y + 1] || !s->map[y - 1]
+					|| x >= (int)ft_strlen(s->map[y + 1])
+					|| x >= (int)ft_strlen(s->map[y - 1]) || s->map[y
+					- 1][x] == ' ' || s->map[y + 1][x] == ' ' || x == 0
+					|| s->map[y][x - 1] == ' ' || s->map[y][x + 1] == ' '
+					|| s->map[y][x + 1] == '\0')
 					ft_printerror("Map is not properly enclosed\n");
 			}
 			x++;
 		}
 		y++;
 	}
+	s->enclosed = 1;
 }
 
 void	parse_file(const char *filename, t_settings *s)
@@ -165,25 +172,69 @@ void	parse_file(const char *filename, t_settings *s)
 	while (line)
 	{
 		if (ft_strncmp(line, "NO ", 3) == 0)
+		{
+			if (s->no_num > 0)
+				ft_printerror("Duplicate NO texture\n");
+			if (!ft_strchr(line, '\n'))
+				ft_printerror("map must end with a newline\n");
 			s->no = ft_strtrim(line + 2, " \n");
+			s->no_num++;
+		}
 		else if (ft_strncmp(line, "SO ", 3) == 0)
+		{
+			if (s->so_num > 0)
+				ft_printerror("Duplicate SO texture\n");
+			if (!ft_strchr(line, '\n'))
+				ft_printerror("map must end with a newline\n");
 			s->so = ft_strtrim(line + 2, " \n");
+			s->so_num++;
+		}
 		else if (ft_strncmp(line, "WE ", 3) == 0)
+		{
+			if (s->we_num > 0)
+				ft_printerror("Duplicate WE texture\n");
+			if (!ft_strchr(line, '\n'))
+				ft_printerror("map must end with a newline\n");
 			s->we = ft_strtrim(line + 2, " \n");
+			s->we_num++;
+		}
 		else if (ft_strncmp(line, "EA ", 3) == 0)
+		{
+			if (s->ea_num > 0)
+				ft_printerror("Duplicate EA texture\n");
+			if (!ft_strchr(line, '\n'))
+				ft_printerror("map must end with a newline\n");
 			s->ea = ft_strtrim(line + 2, " \n");
+			s->ea_num++;
+		}
 		else if (ft_strncmp(line, "F ", 2) == 0)
+		{
+			if (s->f_num > 0)
+				ft_printerror("Duplicate floor color\n");
+			if (!ft_strchr(line, '\n'))
+				ft_printerror("map must end with a newline\n");
 			parse_color(line + 2, s->floor_rgb);
+			s->f_num = 1;
+		}
 		else if (ft_strncmp(line, "C ", 2) == 0)
+		{
+			if (s->c_num > 0)
+				ft_printerror("Duplicate ceiling color\n");
+			if (!ft_strchr(line, '\n'))
+				ft_printerror("map must end with a newline\n");
 			parse_color(line + 2, s->ceiling_rgb);
+			s->c_num = 1;
+		}
 		else if (1)
 		{
-	//		printf("LINE %d: %s", map_i, line);
 			map[map_i++] = ft_strtrim(line, "\n");
 		}
 		free(line);
 		line = get_next_line(fd);
 	}
+	if (s->f_num != 1 || s->c_num != 1 || s->no_num != 1 || s->so_num != 1
+		|| s->we_num != 1 || s->ea_num != 1)
+		ft_printerror("Missing texture/color definitions\n");
 	map[map_i] = NULL;
 	close(fd);
 	s->map = map;

@@ -6,7 +6,7 @@
 /*   By: juanherr <juanherr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 12:37:51 by juanherr          #+#    #+#             */
-/*   Updated: 2025/05/29 13:26:42 by juanherr         ###   ########.fr       */
+/*   Updated: 2025/06/06 17:47:42 by juanherr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,9 +65,16 @@
 typedef struct s_settings
 {
 	char			*no;
+	int		        no_num;
 	char			*so;
+	int				so_num;
 	char			*we;
+	int				we_num;
 	char			*ea;
+	int				ea_num;
+	int				f_num;
+	int				c_num;
+	int				enclosed;
 	int				floor_rgb[3];
 	int				ceiling_rgb[3];
 	char			**map;

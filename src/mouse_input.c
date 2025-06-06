@@ -6,7 +6,7 @@
 /*   By: juanherr <juanherr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 23:34:44 by aloiki            #+#    #+#             */
-/*   Updated: 2025/05/26 13:35:53 by juanherr         ###   ########.fr       */
+/*   Updated: 2025/06/06 15:30:30 by juanherr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,8 +67,6 @@ int	mouse_handler(int x, int y, t_game *game)
 	prev_y = y;
 	if (x <= 10 || x >= WIN_WIDTH - 10)
 	{
-		//printf("Recentering mouse to %d, %d\n", WIN_WIDTH / 2, WIN_HEIGHT / 2);
-
 		mlx_mouse_move(game->img.mlx, game->img.win, WIN_WIDTH / 2, WIN_HEIGHT / 2);
 		ignore = 1;
 	}
