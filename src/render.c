@@ -6,7 +6,7 @@
 /*   By: juanherr <juanherr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/09 12:09:34 by juanherr          #+#    #+#             */
-/*   Updated: 2025/05/26 15:29:26 by juanherr         ###   ########.fr       */
+/*   Updated: 2025/06/06 18:46:02 by juanherr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,13 +61,12 @@ void	draw_map(t_game *game)
 		}
 		y++;
 	}
-	draw_tile(&game->img,
-				game->settings.player_x * TILE_SIZE + TILE_SIZE / 4,
-				game->settings.player_y * TILE_SIZE + TILE_SIZE / 4,
-				COLOR_PLAYER);
+	draw_tile(&game->img, game->settings.player_x * TILE_SIZE + TILE_SIZE / 4,
+		game->settings.player_y * TILE_SIZE + TILE_SIZE / 4, COLOR_PLAYER);
 }
 
-void	draw_player_circle(t_game *game, int center_x, int center_y, int radius, int color)
+void	draw_player_circle(t_game *game, int center_x, int center_y, int radius,
+		int color)
 {
 	int	dx;
 	int	dy;
@@ -86,7 +85,8 @@ void	draw_player_circle(t_game *game, int center_x, int center_y, int radius, in
 	}
 }
 
-void	draw_fov_cone(t_game *game, int px, int py, double angle, double fov, int length, int color)
+void	draw_fov_cone(t_game *game, int px, int py, double angle, double fov,
+		int length, int color)
 {
 	int		i;
 	double	start_angle;
@@ -94,14 +94,15 @@ void	draw_fov_cone(t_game *game, int px, int py, double angle, double fov, int l
 	int		steps;
 	int		x;
 	int		y;
+	int		j;
 
 	start_angle = angle - (fov / 2.0);
-	steps = 50; // Número de pasos para el cono de visión
+	steps = 50;
 	i = 0;
 	while (i < steps)
 	{
 		ray_angle = start_angle + (fov * i / steps);
-		int j = 0;
+		j = 0;
 		while (j < length)
 		{
 			x = px + cos(ray_angle) * j;
@@ -113,12 +114,13 @@ void	draw_fov_cone(t_game *game, int px, int py, double angle, double fov, int l
 	}
 }
 
-
 void	draw_minimap(t_game *game)
 {
 	int	x;
 	int	y;
 	int	color;
+	int	px;
+	int	py;
 
 	y = 0;
 	while (game->settings.map && game->settings.map[y])
@@ -135,14 +137,8 @@ void	draw_minimap(t_game *game)
 		}
 		y++;
 	}
-
-	// Coordenadas del jugador en el minimapa
-	int px = game->settings.player_x * MINIMAP_TILE;
-	int py = game->settings.player_y * MINIMAP_TILE;
-
-	// Círculo rojo
+	px = game->settings.player_x * MINIMAP_TILE;
+	py = game->settings.player_y * MINIMAP_TILE;
 	draw_player_circle(game, px, py, 3, 0xFF0000);
-
-	// Cono azul de visión (sustituye la rayita amarilla)
 	draw_fov_cone(game, px, py, game->settings.player_angle, FOV, 15, 0x00FFFF);
 }

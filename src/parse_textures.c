@@ -6,7 +6,7 @@
 /*   By: juanherr <juanherr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 10:33:09 by juanherr          #+#    #+#             */
-/*   Updated: 2025/05/28 13:57:05 by juanherr         ###   ########.fr       */
+/*   Updated: 2025/06/06 18:45:01 by juanherr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,17 +47,13 @@ void	draw_floor_and_ceiling(t_game *g)
 	int	pitch;
 	int	y;
 	int	x;
-	
+	int	top_color;
+	int	bot_color;
+
 	buf = (int *)g->img.addr;
 	pitch = g->img.line_len / 4;
-	int top_color =
-		(g->settings.ceiling_rgb[0] << 16) |
-		(g->settings.ceiling_rgb[1] << 8) |
-		g->settings.ceiling_rgb[2];
-	int bot_color =
-		(g->settings.floor_rgb[0] << 16) |
-		(g->settings.floor_rgb[1] << 8) |
-		g->settings.floor_rgb[2];
+	top_color = (g->settings.ceiling_rgb[0] << 16) | (g->settings.ceiling_rgb[1] << 8) | g->settings.ceiling_rgb[2];
+	bot_color = (g->settings.floor_rgb[0] << 16) | (g->settings.floor_rgb[1] << 8) | g->settings.floor_rgb[2];
 	y = 0;
 	while (y < WIN_HEIGHT / 2)
 	{
