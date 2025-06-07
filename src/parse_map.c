@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_map.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: juanherr <juanherr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aloiki <aloiki@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 15:03:11 by juanherr          #+#    #+#             */
-/*   Updated: 2025/06/06 18:03:15 by juanherr         ###   ########.fr       */
+/*   Updated: 2025/06/07 22:32:13 by aloiki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,12 +72,6 @@ int	in_map(t_settings *s)
 {
 	int	y;
 
-	// y = 0;
-	// while (s->map[y])
-	// {
-	// 	printf("Map line %d: %s\n", y, s->map[y]);
-	// 	y++;
-	// }
 	y = 0;
 	while (!ft_strchr(s->map[y], '1'))
 		y++;
@@ -89,10 +83,8 @@ int	in_map(t_settings *s)
 		{
 			ft_printerror("Map contains empty lines\n");
 		}
-	//	printf("Map line %d: %s\n", y, s->map[y]);
 		y++;
 	}
-	//printf("Map ends at line %d\n", y - 1);
 	if (s->map[y])
 		ft_printerror("Map must be at the end of the map file\n");
 	return (y);
@@ -110,13 +102,15 @@ static void	parse_map_chars(t_settings *s)
 	while (s->map[y])
 	{
 		x = 0;
-		while ((c = s->map[y][x]))
+		c = s->map[y][x];
+		while (c)
 		{
 			if (c != '1' && c != '0' && c != ' ' && !ft_strchr("NSEW", c))
 				ft_printerror("Invalid character in map\n");
 			if (ft_strchr("NSEW", c))
 				player_count++;
 			x++;
+			c = s->map[y][x];
 		}
 		y++;
 	}
@@ -134,113 +128,61 @@ void	check_map_enclosed(t_settings *s)
 	while (s->map[y])
 	{
 		x = 0;
-		while ((c = s->map[y][x]))
+		c = s->map[y][x];
+		while (c)
 		{
-			if (c == '0' || ft_strchr("NSEW", c))
-			{
-				if (!s->map[y + 1] || !s->map[y - 1]
-					|| x >= (int)ft_strlen(s->map[y + 1])
-					|| x >= (int)ft_strlen(s->map[y - 1]) || s->map[y
-					- 1][x] == ' ' || s->map[y + 1][x] == ' ' || x == 0
-					|| s->map[y][x - 1] == ' ' || s->map[y][x + 1] == ' '
-					|| s->map[y][x + 1] == '\0')
-					ft_printerror("Map is not properly enclosed\n");
-			}
+			if ((c == '0' || ft_strchr("NSEW", c)) && (!s->map[y + 1]
+					|| !s->map[y - 1] || x >= (int)ft_strlen(s->map[y + 1])
+					|| x >= (int)ft_strlen(s->map[y - 1])
+					|| s->map[y - 1][x] == ' ' || s->map[y + 1][x] == ' '
+					|| x == 0 || s->map[y][x - 1] == ' '
+					|| s->map[y][x + 1] == ' ' || s->map[y][x + 1] == '\0'))
+				ft_printerror("Map is not properly enclosed\n");
 			x++;
+			c = s->map[y][x];
 		}
 		y++;
 	}
 	s->enclosed = 1;
 }
 
-void	parse_file(const char *filename, t_settings *s)
+static void	check_content(int *num, char **str_to_save, char *line,
+		char *error_msg)
 {
-	int		fd;
-	char	*line;
-	char	**map;
-	int		map_i;
-	int		x;
+	if (*num > 0)
+		ft_printerror(error_msg);
+	if (!ft_strchr(line, '\n'))
+		ft_printerror("map must end with a newline\n");
+	*str_to_save = ft_strtrim(line + 2, " \n");
+	(*num)++;
+}
+
+static void	check_f_color(char *line, t_settings *s)
+{
+	if (s->f_num > 0)
+		ft_printerror("Duplicate floor color\n");
+	if (!ft_strchr(line, '\n'))
+		ft_printerror("map must end with a newline\n");
+	parse_color(line + 2, s->floor_rgb);
+	s->f_num = 1;
+}
+
+static void	check_c_color(char *line, t_settings *s)
+{
+	if (s->c_num > 0)
+		ft_printerror("Duplicate ceiling color\n");
+	if (!ft_strchr(line, '\n'))
+		ft_printerror("map must end with a newline\n");
+	parse_color(line + 2, s->ceiling_rgb);
+	s->c_num = 1;
+}
+
+static void	find_player(t_settings *s)
+{
 	int		y;
+	int		x;
 	char	c;
 
-	fd = open(filename, O_RDONLY);
-	map = malloc(sizeof(char *) * (count_map_lines(filename) + 1));
-	if (fd < 0 || !map)
-		ft_printerror("Error opening file\n");
-	map_i = 0;
-	line = get_next_line(fd);
-	while (line)
-	{
-		if (ft_strncmp(line, "NO ", 3) == 0)
-		{
-			if (s->no_num > 0)
-				ft_printerror("Duplicate NO texture\n");
-			if (!ft_strchr(line, '\n'))
-				ft_printerror("map must end with a newline\n");
-			s->no = ft_strtrim(line + 2, " \n");
-			s->no_num++;
-		}
-		else if (ft_strncmp(line, "SO ", 3) == 0)
-		{
-			if (s->so_num > 0)
-				ft_printerror("Duplicate SO texture\n");
-			if (!ft_strchr(line, '\n'))
-				ft_printerror("map must end with a newline\n");
-			s->so = ft_strtrim(line + 2, " \n");
-			s->so_num++;
-		}
-		else if (ft_strncmp(line, "WE ", 3) == 0)
-		{
-			if (s->we_num > 0)
-				ft_printerror("Duplicate WE texture\n");
-			if (!ft_strchr(line, '\n'))
-				ft_printerror("map must end with a newline\n");
-			s->we = ft_strtrim(line + 2, " \n");
-			s->we_num++;
-		}
-		else if (ft_strncmp(line, "EA ", 3) == 0)
-		{
-			if (s->ea_num > 0)
-				ft_printerror("Duplicate EA texture\n");
-			if (!ft_strchr(line, '\n'))
-				ft_printerror("map must end with a newline\n");
-			s->ea = ft_strtrim(line + 2, " \n");
-			s->ea_num++;
-		}
-		else if (ft_strncmp(line, "F ", 2) == 0)
-		{
-			if (s->f_num > 0)
-				ft_printerror("Duplicate floor color\n");
-			if (!ft_strchr(line, '\n'))
-				ft_printerror("map must end with a newline\n");
-			parse_color(line + 2, s->floor_rgb);
-			s->f_num = 1;
-		}
-		else if (ft_strncmp(line, "C ", 2) == 0)
-		{
-			if (s->c_num > 0)
-				ft_printerror("Duplicate ceiling color\n");
-			if (!ft_strchr(line, '\n'))
-				ft_printerror("map must end with a newline\n");
-			parse_color(line + 2, s->ceiling_rgb);
-			s->c_num = 1;
-		}
-		else if (1)
-		{
-			map[map_i++] = ft_strtrim(line, "\n");
-		}
-		free(line);
-		line = get_next_line(fd);
-	}
-	if (s->f_num != 1 || s->c_num != 1 || s->no_num != 1 || s->so_num != 1
-		|| s->we_num != 1 || s->ea_num != 1)
-		ft_printerror("Missing texture/color definitions\n");
-	map[map_i] = NULL;
-	close(fd);
-	s->map = map;
-	in_map(s);
-	parse_map_chars(s);
-	check_map_enclosed(s);
 	y = 0;
 	while (s->map[y])
 	{
@@ -259,4 +201,54 @@ void	parse_file(const char *filename, t_settings *s)
 		}
 		y++;
 	}
+}
+
+static void	fill_map(t_settings *s, char ***map, int fd)
+{
+	int		map_i;
+	char	*line;
+
+	line = get_next_line(fd);
+	map_i = 0;
+	while (line)
+	{
+		if (ft_strncmp(line, "NO ", 3) == 0)
+			check_content(&s->no_num, &s->no, line, "Duplicate NO texture\n");
+		else if (ft_strncmp(line, "SO ", 3) == 0)
+			check_content(&s->so_num, &s->so, line, "Duplicate SO texture\n");
+		else if (ft_strncmp(line, "WE ", 3) == 0)
+			check_content(&s->we_num, &s->we, line, "Duplicate WE texture\n");
+		else if (ft_strncmp(line, "EA ", 3) == 0)
+			check_content(&s->ea_num, &s->ea, line, "Duplicate EA texture\n");
+		else if (ft_strncmp(line, "F ", 2) == 0)
+			check_f_color(line, s);
+		else if (ft_strncmp(line, "C ", 2) == 0)
+			check_c_color(line, s);
+		else if (1)
+			(*map)[map_i++] = ft_strtrim(line, "\n");
+		free(line);
+		line = get_next_line(fd);
+	}
+	(*map)[map_i] = NULL;
+}
+
+void	parse_file(const char *filename, t_settings *s)
+{
+	int		fd;
+	char	**map;
+
+	fd = open(filename, O_RDONLY);
+	map = malloc(sizeof(char *) * (count_map_lines(filename) + 1));
+	if (fd < 0 || !map)
+		ft_printerror("Error opening file\n");
+	fill_map(s, &map, fd);
+	if (s->f_num != 1 || s->c_num != 1 || s->no_num != 1 || s->so_num != 1
+		|| s->we_num != 1 || s->ea_num != 1)
+		ft_printerror("Missing texture/color definitions\n");
+	close(fd);
+	s->map = map;
+	in_map(s);
+	parse_map_chars(s);
+	check_map_enclosed(s);
+	find_player(s);
 }
