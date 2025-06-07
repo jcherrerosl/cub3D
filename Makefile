@@ -95,7 +95,7 @@ commit: fclean
 	@git add .
 	@./commit.sh
 	@INPUT_VAR=$$(cat input.txt) && git commit -m "$(shell date +"%Y-%m-%d %H:%M:%S"):  $$INPUT_VAR" && rm -f input.txt
-	@git push
+	@git push origin HEAD:main
 
 valgrind:
 	@valgrind --leak-check=full --track-origins=yes --show-leak-kinds=all ./$(NAME)
