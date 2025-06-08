@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse_map.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aloiki <aloiki@student.42.fr>              +#+  +:+       +#+        */
+/*   By: juanherr <juanherr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 15:03:11 by juanherr          #+#    #+#             */
-/*   Updated: 2025/06/07 22:32:13 by aloiki           ###   ########.fr       */
+/*   Updated: 2025/06/08 10:12:40 by juanherr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,18 +71,25 @@ static int	count_map_lines(const char *filename)
 int	in_map(t_settings *s)
 {
 	int	y;
+	char *trimmed;
 
 	y = 0;
 	while (!ft_strchr(s->map[y], '1'))
 		y++;
 	while (s->map[y])
 	{
-		if (!ft_strchr(s->map[y], '1') && !ft_strchr(s->map[y], '\n'))
-			ft_printerror("Map must be at the end of the map file\n");
-		else if (!ft_strchr(s->map[y], '1'))
+		trimmed = ft_strtrim(s->map[y], " \t\n");
+		if (ft_strlen(trimmed) == 0)
 		{
+			free(trimmed);
 			ft_printerror("Map contains empty lines\n");
 		}
+		if (!ft_strchr(s->map[y], '1') && !ft_strchr(s->map[y], '\n'))
+		{
+			free(trimmed);
+			ft_printerror("Map must be at the end of the map file\n");
+		}
+		free(trimmed);
 		y++;
 	}
 	if (s->map[y])
@@ -172,7 +179,7 @@ static void	check_c_color(char *line, t_settings *s)
 	if (s->c_num > 0)
 		ft_printerror("Duplicate ceiling color\n");
 	if (!ft_strchr(line, '\n'))
-		ft_printerror("map must end with a newline\n");
+		ft_printerror("Map must end with a newline\n");
 	parse_color(line + 2, s->ceiling_rgb);
 	s->c_num = 1;
 }
