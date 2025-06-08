@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: juanherr <juanherr@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aloiki <aloiki@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 12:37:51 by juanherr          #+#    #+#             */
-/*   Updated: 2025/06/06 18:11:53 by juanherr         ###   ########.fr       */
+/*   Updated: 2025/06/07 21:59:55 by aloiki           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,7 +65,7 @@
 typedef struct s_settings
 {
 	char			*no;
-	int		        no_num;
+	int				no_num;
 	char			*so;
 	int				so_num;
 	char			*we;
@@ -186,7 +186,7 @@ void				init_game(t_game *game);
 void				init_gun_sprite(t_game *game);
 
 // init_textures.c
-t_textures	*init_textures(t_game *game);
+t_textures			*init_textures(t_game *game);
 
 // events.c
 int					key_handler(int key, void *param);
@@ -224,6 +224,17 @@ void				rotate_left_right(t_game *game, int pos_x);
 
 // movement.c
 void				handle_movement(t_game *game);
+void				w_pressed(double *player_x, double *player_y, double angle,
+						double step);
+void				s_pressed(double *player_x, double *player_y, double angle,
+						double step);
+void				d_pressed(double *player_x, double *player_y, double angle,
+						double step);
+void				a_pressed(double *player_x, double *player_y, double angle,
+						double step);
+void				init_vars1(double *rot, double *angle, double *nx,
+						t_game *g);
+void				init_vars2(double *ny, double *step, t_game *g);
 
 // general_utils.c
 int					ft_isdigit_str(char *s);
