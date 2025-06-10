@@ -3,42 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   render.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aloiki <aloiki@student.42.fr>              +#+  +:+       +#+        */
+/*   By: juanherr <juanherr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/09 12:09:34 by juanherr          #+#    #+#             */
-/*   Updated: 2025/06/07 14:33:03 by aloiki           ###   ########.fr       */
+/*   Updated: 2025/06/10 11:10:28 by juanherr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
-
-void	draw_pixel(t_img *img, int x, int y, int color)
-{
-	char	*dst;
-
-	if (x < 0 || x >= WIN_WIDTH || y < 0 || y >= WIN_HEIGHT)
-		return ;
-	dst = img->addr + (y * img->line_len + x * (img->bpp / 8));
-	*(unsigned int *)dst = color; 
-}
-
-void	draw_tile(t_img *img, int x, int y, int color)
-{
-	int	i;
-	int	j;
-
-	i = 0;
-	while (i < MINIMAP_TILE)
-	{
-		j = 0;
-		while (j < MINIMAP_TILE)
-		{
-			draw_pixel(img, x + j, y + i, color);
-			j++;
-		}
-		i++;
-	}
-}
 
 void	draw_map(t_game *game)
 {
@@ -65,49 +37,50 @@ void	draw_map(t_game *game)
 		game->settings.player_y * TILE_SIZE + TILE_SIZE / 4, COLOR_PLAYER);
 }
 
-void	draw_player_circle(t_game *game, int center_x, int center_y, int radius,
-		int color)
+void	draw_player_circle(t_game *g, int color)
 {
 	int	dx;
 	int	dy;
 
-	dy = -radius;
-	while (dy <= radius)
+	g->center_x = g->settings.player_x * MINIMAP_TILE;
+	g->center_y = g->settings.player_y * MINIMAP_TILE;
+	g->radius = 3;
+	dy = -(g->radius);
+	while (dy <= g->radius)
 	{
-		dx = -radius;
-		while (dx <= radius)
+		dx = -(g->radius);
+		while (dx <= g->radius)
 		{
-			if (dx * dx + dy * dy <= radius * radius)
-				draw_pixel(&game->img, center_x + dx, center_y + dy, color);
+			if (dx * dx + dy * dy <= g->radius * g->radius)
+				draw_pixel(&g->img, g->center_x + dx, g->center_y + dy, color);
 			dx++;
 		}
 		dy++;
 	}
 }
 
-void	draw_fov_cone(t_game *game, int px, int py, double angle, double fov,
-		int length, int color)
+void	draw_fov_cone(t_game *g, int px, int py, int length)
 {
 	int		i;
-	double	start_angle;
-	double	ray_angle;
 	int		steps;
 	int		x;
 	int		y;
 	int		j;
 
-	start_angle = angle - (fov / 2.0);
+	g->angle = g->settings.player_angle;
+	g->fov = FOV;
+	g->start_angle = g->angle - (g->fov / 2.0);
 	steps = 50;
 	i = 0;
 	while (i < steps)
 	{
-		ray_angle = start_angle + (fov * i / steps);
+		g->ray_angle = g->start_angle + (g->fov * i / steps);
 		j = 0;
 		while (j < length)
 		{
-			x = px + cos(ray_angle) * j;
-			y = py + sin(ray_angle) * j;
-			draw_pixel(&game->img, x, y, color);
+			x = px + cos(g->ray_angle) * j;
+			y = py + sin(g->ray_angle) * j;
+			draw_pixel(&g->img, x, y, COLOR_CONE);
 			j++;
 		}
 		i++;
@@ -139,6 +112,6 @@ void	draw_minimap(t_game *game)
 	}
 	px = game->settings.player_x * MINIMAP_TILE;
 	py = game->settings.player_y * MINIMAP_TILE;
-	draw_player_circle(game, px, py, 3, 0xFF0000);
-	draw_fov_cone(game, px, py, game->settings.player_angle, FOV, 15, 0x00FFFF);
+	draw_player_circle(game, COLOR_PLAYER);
+	draw_fov_cone(game, px, py, 15);
 }

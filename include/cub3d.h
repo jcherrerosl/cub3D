@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aloiki <aloiki@student.42.fr>              +#+  +:+       +#+        */
+/*   By: juanherr <juanherr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 12:37:51 by juanherr          #+#    #+#             */
-/*   Updated: 2025/06/07 21:59:55 by aloiki           ###   ########.fr       */
+/*   Updated: 2025/06/10 12:15:11 by juanherr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@
 # define COLOR_FLOOR 0x111111
 # define COLOR_CEILING 0x222222
 # define COLOR_PLAYER 0xFF0000
+# define COLOR_CONE 0x00FFFF
 
 # define KEY_ESC 65307
 # define KEY_ENTER 65293
@@ -157,6 +158,13 @@ typedef struct s_gun
 	int				y;
 }					t_gun;
 
+typedef struct s_mouse
+{
+	int				prev_x;
+	int				prev_y;
+	int				ignore;
+}					t_mouse;
+
 typedef struct s_game
 {
 	t_settings		settings;
@@ -166,6 +174,7 @@ typedef struct s_game
 	t_textures		*textures;
 	t_render_info	render_info[WIN_WIDTH];
 	t_gun			*gun;
+	t_mouse			mouse;
 	void			*intro_img;
 	int				intro_w;
 	int				intro_h;
@@ -178,6 +187,14 @@ typedef struct s_game
 	double			dt;
 	double			move_speed;
 	double			rot_speed;
+	int				center_x;
+	int				center_y;
+	double			radius;
+	double			angle;
+	double			fov;
+	int				color;
+	double			start_angle;
+	double			ray_angle;
 }					t_game;
 
 // init.c
@@ -189,7 +206,6 @@ void				init_gun_sprite(t_game *game);
 t_textures			*init_textures(t_game *game);
 
 // events.c
-int					key_handler(int key, void *param);
 int					close_window(void *param);
 int					render_frame(void *param);
 int					key_press(int keycode, t_game *game);
@@ -198,12 +214,22 @@ double				now_ms(void);
 
 // parse_map.c
 int					check_extension(const char *filename);
+void				check_map_enclosed(t_settings *s);
+void				check_content(int *num, char **str_to_save, char *line,
+						char *error_msg);
+void				check_f_color(char *line, t_settings *s);
+void				check_c_color(char *line, t_settings *s);
+int					count_map_lines(const char *filename);
+int					in_map(t_settings *s);
 int					is_map_line(char *line);
 void				store_player(t_settings *s, int x, int y, char dir);
 void				parse_file(const char *filename, t_settings *s);
-void				check_walls(t_settings *s);
+void				parse_map_chars(t_settings *s);
+void				find_player(t_settings *s);
+void 				fill_map(t_settings *s, char ***map, int fd);
 
-// render.c
+
+// render.c 
 void				draw_pixel(t_img *img, int x, int y, int color);
 void				draw_tile(t_img *img, int x, int y, int color);
 void				draw_map(t_game *game);
