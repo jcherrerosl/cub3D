@@ -6,7 +6,7 @@
 /*   By: juanherr <juanherr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 12:37:51 by juanherr          #+#    #+#             */
-/*   Updated: 2025/06/10 12:15:11 by juanherr         ###   ########.fr       */
+/*   Updated: 2025/06/10 13:54:05 by juanherr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -165,6 +165,27 @@ typedef struct s_mouse
 	int				ignore;
 }					t_mouse;
 
+typedef struct s_ray
+{
+	double			pos_x;
+	double			pos_y;
+	int				map_x;
+	int				map_y;
+	double			delta_x;
+	double			delta_y;
+	double			side_dist_x;
+	double			side_dist_y;
+	int				step_x;
+	int				step_y;
+}					t_ray;
+
+typedef struct s_ray_hit
+{
+	double			x;
+	double			y;
+	int				side;
+}					t_ray_hit;
+
 typedef struct s_game
 {
 	t_settings		settings;
@@ -175,6 +196,7 @@ typedef struct s_game
 	t_render_info	render_info[WIN_WIDTH];
 	t_gun			*gun;
 	t_mouse			mouse;
+	t_ray_hit		hit;
 	void			*intro_img;
 	int				intro_w;
 	int				intro_h;
@@ -195,6 +217,10 @@ typedef struct s_game
 	int				color;
 	double			start_angle;
 	double			ray_angle;
+	double			ray_angle2;
+	double			ray_x;
+	double			ray_y;
+	int				side;
 }					t_game;
 
 // init.c
@@ -226,23 +252,23 @@ void				store_player(t_settings *s, int x, int y, char dir);
 void				parse_file(const char *filename, t_settings *s);
 void				parse_map_chars(t_settings *s);
 void				find_player(t_settings *s);
-void 				fill_map(t_settings *s, char ***map, int fd);
+void				fill_map(t_settings *s, char ***map, int fd);
 
-
-// render.c 
+// render.c
 void				draw_pixel(t_img *img, int x, int y, int color);
 void				draw_tile(t_img *img, int x, int y, int color);
 void				draw_map(t_game *game);
 void				draw_minimap(t_game *game);
 void				draw_gun(t_game *game, void *frame_img);
+void 				draw_column(t_game *game, int x, int wall_height, int color);
+void				draw_textured_column(t_game *game, t_render_info r);
 
 // raycasting.c
 void				draw_column(t_game *game, int x, int wall_height,
 						int color);
 void				cast_rays(t_game *game);
-double				cast_single_ray(t_game *game, double ray_angle,
-						double *ray_x, double *ray_y, int *side);
-void				draw_textured_column(t_game *game, t_render_info r);
+double				cast_single_ray(t_game *g, double *ray_x, double *ray_y,
+						int *side);
 
 // mouse_input.c
 int					mouse_handler(int x, int y, t_game *game);

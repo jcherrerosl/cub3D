@@ -6,11 +6,29 @@
 /*   By: juanherr <juanherr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/09 12:11:26 by juanherr          #+#    #+#             */
-/*   Updated: 2025/06/10 11:07:50 by juanherr         ###   ########.fr       */
+/*   Updated: 2025/06/10 13:51:59 by juanherr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
+
+void	draw_column(t_game *game, int x, int wall_height, int color)
+{
+	int	y;
+	int	end;
+
+	y = (WIN_HEIGHT / 2) - (wall_height / 2) + game->camera->vert_offset;
+	end = y + wall_height;
+	if (y < 0)
+		y = 0;
+	if (end > WIN_HEIGHT)
+		end = WIN_HEIGHT;
+	while (y < end)
+	{
+		draw_pixel(&game->img, x, y, color);
+		y++;
+	}
+}
 
 void	draw_textured_column(t_game *game, t_render_info r)
 {
