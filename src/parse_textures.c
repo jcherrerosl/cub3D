@@ -6,7 +6,7 @@
 /*   By: juanherr <juanherr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 10:33:09 by juanherr          #+#    #+#             */
-/*   Updated: 2025/06/06 18:45:01 by juanherr         ###   ########.fr       */
+/*   Updated: 2025/06/10 12:26:17 by juanherr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,39 +41,55 @@ int	parse_color(char *str, int *rgb)
 	return (1);
 }
 
-void	draw_floor_and_ceiling(t_game *g)
+static void	draw_ceiling(int *buf, int pitch, int color)
 {
-	int	*buf;
-	int	pitch;
 	int	y;
 	int	x;
-	int	top_color;
-	int	bot_color;
 
-	buf = (int *)g->img.addr;
-	pitch = g->img.line_len / 4;
-	top_color = (g->settings.ceiling_rgb[0] << 16) | (g->settings.ceiling_rgb[1] << 8) | g->settings.ceiling_rgb[2];
-	bot_color = (g->settings.floor_rgb[0] << 16) | (g->settings.floor_rgb[1] << 8) | g->settings.floor_rgb[2];
 	y = 0;
 	while (y < WIN_HEIGHT / 2)
 	{
 		x = 0;
 		while (x < WIN_WIDTH)
 		{
-			buf[y * pitch + x] = top_color;
-			++x;
+			buf[y * pitch + x] = color;
+			x++;
 		}
-		++y;
+		y++;
 	}
+}
+
+static void	draw_floor(int *buf, int pitch, int color)
+{
+	int	y;
+	int	x;
+
 	y = WIN_HEIGHT / 2;
 	while (y < WIN_HEIGHT)
 	{
 		x = 0;
 		while (x < WIN_WIDTH)
 		{
-			buf[y * pitch + x] = bot_color;
-			++x;
+			buf[y * pitch + x] = color;
+			x++;
 		}
-		++y;
+		y++;
 	}
+}
+
+void	draw_floor_and_ceiling(t_game *g)
+{
+	int	*buf;
+	int	pitch;
+	int	top_color;
+	int	bot_color;
+
+	buf = (int *)g->img.addr;
+	pitch = g->img.line_len / 4;
+	top_color = (g->settings.ceiling_rgb[0] << 16)
+		| (g->settings.ceiling_rgb[1] << 8) | g->settings.ceiling_rgb[2];
+	bot_color = (g->settings.floor_rgb[0] << 16)
+		| (g->settings.floor_rgb[1] << 8) | g->settings.floor_rgb[2];
+	draw_ceiling(buf, pitch, top_color);
+	draw_floor(buf, pitch, bot_color);
 }
