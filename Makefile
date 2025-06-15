@@ -1,7 +1,7 @@
 NAME = cub3D
 
 CC = gcc
-CFLAGS = -Wall -Wextra -Werror -fsanitize=address,leak -g
+CFLAGS = -Wall -Wextra -Werror
 
 SRC_DIR = src
 BUILD_DIR = build
