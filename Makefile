@@ -16,7 +16,27 @@ LIBFT_LIB = -L$(LIBFT_DIR) -lft
 X11_LIB = -lXext -lX11 -lm
 LIBS = $(MLX_LIB) $(LIBFT_LIB) -L$(LIBFT_DIR)/ft_printf -lftprintf $(X11_LIB)
 
-SRCS = $(wildcard $(SRC_DIR)/*.c)
+SRCS = \
+	$(SRC_DIR)/checkers.c               \
+	$(SRC_DIR)/draw_gun.c               \
+	$(SRC_DIR)/events.c                 \
+	$(SRC_DIR)/general_utils.c          \
+	$(SRC_DIR)/init.c                   \
+	$(SRC_DIR)/init_textures.c          \
+	$(SRC_DIR)/main.c                   \
+	$(SRC_DIR)/mouse_input.c            \
+	$(SRC_DIR)/movement.c               \
+	$(SRC_DIR)/movement_separator.c     \
+	$(SRC_DIR)/movement_separator2.c    \
+	$(SRC_DIR)/parse_map.c              \
+	$(SRC_DIR)/parse_map_utils.c        \
+	$(SRC_DIR)/parse_textures.c         \
+	$(SRC_DIR)/raycasting.c             \
+	$(SRC_DIR)/raycasting_init.c        \
+	$(SRC_DIR)/raycasting_utils.c       \
+	$(SRC_DIR)/render.c                 \
+	$(SRC_DIR)/render_utils.c
+
 OBJS = $(patsubst $(SRC_DIR)/%.c,$(BUILD_DIR)/%.o,$(SRCS))
 
 COMPILED_FLAG = .compiled
