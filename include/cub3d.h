@@ -6,7 +6,7 @@
 /*   By: juanherr <juanherr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 12:37:51 by juanherr          #+#    #+#             */
-/*   Updated: 2025/06/10 13:54:05 by juanherr         ###   ########.fr       */
+/*   Updated: 2025/06/16 01:18:24 by juanherr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@
 # define WIN_HEIGHT 1080
 
 # define MINIMAP_RATIO 0.5
-# define MINIMAP_TILE TILE_SIZE *MINIMAP_RATIO
+# define MINIMAP_TILE 10
 
 # define MAX_VERTICAL_OFFSET 200
 # define COLLISION_BUFFER 0.1
@@ -37,12 +37,11 @@
 #  define M_PI_2 1.57079632679489661923
 # endif
 
-//# define STEP 0.005
-# define MOVE_SPEED 3 // tiles per second
-# define ROT_SPEED 1  // radians per second
+# define MOVE_SPEED 3
+# define ROT_SPEED 1
 
-# define FOV (M_PI / 3)
-# define NUM_RAYS WIN_WIDTH * 2
+# define FOV 1.0471975512
+# define NUM_RAYS 3840
 
 # define TILE_SIZE 20
 # define COLOR_WALL 0xAAAAAA
@@ -260,7 +259,8 @@ void				draw_tile(t_img *img, int x, int y, int color);
 void				draw_map(t_game *game);
 void				draw_minimap(t_game *game);
 void				draw_gun(t_game *game, void *frame_img);
-void 				draw_column(t_game *game, int x, int wall_height, int color);
+void				draw_column(t_game *game, int x, int wall_height,
+						int color);
 void				draw_textured_column(t_game *game, t_render_info r);
 
 // raycasting.c
