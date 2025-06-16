@@ -6,7 +6,7 @@
 /*   By: juanherr <juanherr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/15 10:34:23 by juanherr          #+#    #+#             */
-/*   Updated: 2025/06/06 18:05:47 by juanherr         ###   ########.fr       */
+/*   Updated: 2025/06/16 01:57:13 by juanherr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,4 +49,24 @@ double	now_ms(void)
 
 	gettimeofday(&tv, NULL);
 	return (tv.tv_sec * 1000.0 + tv.tv_usec / 1000.0);
+}
+
+void	ft_exit_error(char *msg, t_settings *s, char **map)
+{
+	if (map)
+		free_matrix(map);
+	if (s)
+	{
+		if (s->no)
+			free(s->no);
+		if (s->so)
+			free(s->so);
+		if (s->we)
+			free(s->we);
+		if (s->ea)
+			free(s->ea);
+	}
+	ft_putstr_fd("Error\n\t", 2);
+	ft_putstr_fd(msg, 2);
+	exit(1);
 }

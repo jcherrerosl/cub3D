@@ -6,7 +6,7 @@
 /*   By: juanherr <juanherr@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 12:37:51 by juanherr          #+#    #+#             */
-/*   Updated: 2025/06/16 01:18:24 by juanherr         ###   ########.fr       */
+/*   Updated: 2025/06/16 01:40:13 by juanherr         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -295,5 +295,7 @@ void				free_matrix(char **matrix);
 // parse_textures.c
 int					parse_color(char *line, int *color);
 void				draw_floor_and_ceiling(t_game *game);
+
+void				ft_exit_error(char *msg, t_settings *s, char **map);
 
 #endif
